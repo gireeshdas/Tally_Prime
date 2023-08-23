@@ -2016,3 +2016,24 @@ class sales_voucher_stock_item_allocation(models.Model):
     dispatch_id=models.ForeignKey(dispatch_detail,on_delete=models.CASCADE,null=True)
     party_detail_id=models.ForeignKey(party_details,on_delete=models.CASCADE,null=True)
     sales_voucher_stock_item_one_allocation_id=models.ForeignKey(sales_voucher_stock_item_one_allocation,on_delete=models.CASCADE,null=True)
+
+
+class purchase_voucher(models.Model):
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
+    voucher = models.ForeignKey(Voucher,on_delete=models.CASCADE,null=True,blank=True)
+
+    pur_id = models.IntegerField(null=True)
+    sup_inv_no = models.CharField(max_length= 255, null=True)
+    vouch_date = models.DateField(blank = True, null= True)
+    particulars = models.CharField(max_length=255,null= True)
+    amount = models.IntegerField(null= True)
+    narration = models.CharField(max_length=255)
+
+
+class purchase_particulars(models.Model):
+    purchase_voucher = models.ForeignKey(purchase_voucher,on_delete=models.CASCADE,null=True,blank=True)
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
+    particular_id = models.IntegerField(null= True)
+    particular = models.CharField(max_length = 100,null=True,blank=True)
+    credit_amount =  models.IntegerField(null= True)
+    debit_amount = models.IntegerField(null= True)

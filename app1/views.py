@@ -18473,3 +18473,66 @@ def trialbalance_voucher_alter(request,pk):
     }      
 
     return render(request,'trialbalance_voucher_alter.html',context)  
+
+
+
+def list_purchase_voucher(request):
+    if 't_id' in request.session:
+        if request.session.has_key('t_id'):
+            t_id = request.session['t_id']
+        else:
+            return redirect('/')
+        tally = Companies.objects.filter(id=t_id)
+        comp = Companies.objects.get(id = t_id)
+        ledger = tally_ledger.objects.filter(company_id = comp)
+        # for i in range(len(ledger)):
+            
+        #     if ledger[i].current_blnc is None:
+        #         ledger[i].current_blnc = ledger[i].opening_blnc
+        #         ledger[i].current_blnc_type = ledger[i].opening_blnc_type
+
+        #         ledger[i].save()
+        
+        voucher = Voucher.objects.filter(voucher_type = 'Purchase',company = comp)
+        context = {
+                    'voucher': voucher,
+                    'tally':tally,
+
+                }
+        return render(request,'list_payment_type.html',context)
+
+
+def payment_vouchers(request):
+
+    if 't_id' in request.session:
+        if request.session.has_key('t_id'):
+            t_id = request.session['t_id']
+        else:
+            return redirect('/')
+
+        comp = Companies.objects.get(id = t_id)
+        
+        name = request.POST.get('ptype')
+     
+        # vouch = Voucher.objects.filter(voucher_type = 'Payment',company = comp).get(voucher_name = name)
+
+        # ledg_grp_all = tally_ledger.objects.filter(company = comp)
+        # ledg_grp = tally_ledger.objects.filter(company = comp,under__in = ['Bank_Accounts','Cash_in_Hand'])
+
+     
+        # v  = 1 if payment_voucher.objects.filter(company = comp).values('pid').last() is None else payment_voucher.objects.filter(company = comp).values('pid').last()['pid']+1
+        
+        # tally = Companies.objects.filter(id=t_id)
+        context = {
+                    'company' : comp ,
+                    # 'vouch' : vouch,
+                    # 'date1' : date.today(),
+                    'name':name,
+                    # 'ledg' : ledg_grp,
+                    # 'ledg_all' : ledg_grp_all,
+                    # 'v' : v,
+                    # 'tally':tally
+                }
+        return render(request,'purchase_voucher.html',context)
+
+
