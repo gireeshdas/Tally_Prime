@@ -2,7 +2,7 @@
 {% block body %}
 {% load static %}
 
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
     
@@ -128,6 +128,7 @@
         border-radius: 10px;
         margin-top: 50px;
         margin-left: 30px;
+        z-index: 9999;
     }
     .btn{
         color: azure;
@@ -219,7 +220,7 @@
                                 <td colspan="18" style="border: none;" class="mt-4">
 
                                         <select id="payacc1"  name="opt[]" class=" rows acc payacc mb-2 p-0" style="width: 150px; border-radius: 5px;"
-                                         onchange="changeCurbalance();" >
+                                         onchange="changeCurbalance(this);" >
                                             <option class="opt" id = "opt" >&nbsp;&nbsp;Select Particular </option> 
                                             {% for i in ledg_all %}
                                             <option class="opt" id = "opt" value="{{i.id}}" >&nbsp;&nbsp;{{i.name}}</option> 
@@ -556,6 +557,16 @@
 <script>
 
 
+
+/*----------------- create new row----&---change current balance while entering amount------*/
+function createRow(){
+    var id = $('.payacc').length;
+    $(".part").append('<tr style="border: none;"><td colspan="18" style="border: none;" class="mt-4"><select id="payacc'+id+'" name="opt[]" class=" rows acc payacc mb-2 p-0" style="width: 150px; border-radius: 5px;" onchange="changeCurbalance(this);" ><option class="opt" id = "opt" >&nbsp;&nbsp;Select Particular </option>{% for i in ledg_all %}<option class="opt" id = "opt" value="{{i.id}}" >&nbsp;&nbsp;{{i.name}}</option> {% endfor %}</select> <br><label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label> <label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label><label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td> <td colspan="2" class="text-right mt-0" style="border: none; "><input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt[]" oninput="calculateTotal();" onchange="showTransaction();"> <button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()"><i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>');
+    
+}
+
+/*---------------end of create new row-------------*/
+
 /*-----------------------set current balance-----------*/
 
 
@@ -584,24 +595,24 @@
 
 
 
-function changeCurbalance(){
+function changeCurbalance(id){
 
-    const id1 = $(this).attr("id")
-    const parid =$('#payacc'+id1).val();
+    const id1 = $(id).attr('id').slice(-1);
+    console.log(id1)
+    
 
     $.ajax({
         url: '{% url "cur_balance" %}',
         data: {
-                'id': parid
+                'id': $(id).val(),
         },
         
         success: function (data) {
             
             if(data[0].current_blnc_type == 'Dr'){       
-            curData1 = '<input id ="pled" class= "txt" readonly value = '+ data[0].current_blnc +'> <input id ="pledt" class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
+                curData1 = '<input id ="pled'+id1+'" class= "txt" readonly value = '+ data[0].current_blnc +'> <input id ="pledt'+id1+'" class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
             else{
-            curData1 = '<input id ="pled" class= "txt" readonly value = '+ data[0].current_blnc +' style="color: red;"> <input id ="pledt" style="color: red;"  class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
-            //console.log(curData);
+                curData1 = '<input id ="pled'+id1+'" class= "txt" readonly value = '+ data[0].current_blnc +' style="color: red;"> <input id ="pledt'+id1+'" style="color: red;"  class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
             $("#blnc"+id1).html(curData1);
         }
         
@@ -612,29 +623,20 @@ function changeCurbalance(){
 /*----------------------end of set current balance-----------*/
 
 
-/*----------------- create new row----&---change current balance while entering amount------*/
-var id = 1
-function createRow(){
-  
-    id++;
-    $(".part").append('<tr style="border: none;"><td colspan="18" style="border: none;" class="mt-4"><select id="payacc'+id+'"  name="opt[]" class=" rows acc payacc mb-2 p-0" style="width: 150px; border-radius: 5px;" onchange="changeCurbalance();" ><option class="opt" id = "opt" >&nbsp;&nbsp;Select Particular </option>{% for i in ledg_all %}<option class="opt" id = "opt" value="{{i.id}}" >&nbsp;&nbsp;{{i.name}}</option> {% endfor %}</select> <br><label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label><label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label><label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td><td colspan="2" class="text-right mt-0" style="border: none; "><input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt[]" oninput="calculateTotal();" onchange="showTransaction();"><button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()"><i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>');
-    
-}
-
-/*---------------end of create new row-------------*/
 
 /*--------- Total----------*/
 
 function calculateTotal() {
     var sum = 0 ;
-    var count = $('.amnt').length
+    var count = $('.amnt').length;
+    console.log(count)
     
   for(var i = 1; i <= count; i++) {
     var value1 = document.getElementById("amnt" + i);
     if(isNaN(value1.value) == false){
         sum += parseInt(value1.value) ;
     }
-    //console.log(value1);
+    console.log(value1);
   }
   $('#total').val(sum);
   
@@ -643,8 +645,9 @@ function calculateTotal() {
 
 function setClosing() {
 
-    console.log('Set Value')
-
+    // console.log('Set Value')
+    id = $('.amnt').length;
+    console.log(id)
     const ac = ($('#payacc').val()).split(',')[0];
     const curblnc = $('#led').val();
     const curblnct = $('#ledt').val();
@@ -660,10 +663,10 @@ function setClosing() {
             },
             
             success: function (data) {
-                //console.log(data)
+                // console.log(data)
                 
                 $("#curbalance").html(data);
-                //console.log(cur_change);
+                // console.log(data);
             }
             
         });
@@ -671,8 +674,9 @@ function setClosing() {
     
               
     const pac = $('#payacc'+id).val();
-    const curblnc1 = $('#pled').val();
-    const curblnct1 = $('#pledt').val();
+    const curblnc1 = $('#pled'+id).val();
+    const curblnct1 = $('#pledt'+id).val();
+ 
     
     $.ajax({
         url: '{% url "pcur_balance_change" %}',
@@ -685,15 +689,14 @@ function setClosing() {
         
         success: function (data) {
             
-            $("#blnc"+(id-1)).html(data);
-            //console.log('#blnc'+id);
+            $("#blnc"+(id)).html(data);
         }
     
     });
         
 
    
-    id++;
+    
   }
 
 
@@ -806,7 +809,8 @@ function showTransaction(){
     const vouchtype = $('#vouchtype').text();
     
     if ($("#t_type").text() === 'Cheque'){
-
+        console.log("cheque");
+        console.log($("#chdate").val());
         $.ajax({
                     type : 'POST',
                     url:"{% url 'bank_transaction' %}",
@@ -829,7 +833,7 @@ function showTransaction(){
                     },
                     
                     success: function(response) {
-
+                        console.log(response.message)
                         if(response.message === 'success'){
                             $('#modalForm')[0].reset();
                         
@@ -840,6 +844,8 @@ function showTransaction(){
                 });
     }
     else if($("#t_type").text() === 'e-Fund Transfer'){
+        console.log("e-f");
+        console.log($("#efdate").val());
 
         $.ajax({
                     type : 'POST',
@@ -872,6 +878,9 @@ function showTransaction(){
     }
     else{   
         // console.log($("#partid").val());
+        console.log("others");
+        console.log($("#instdate").val());
+
         $.ajax({
                     type : 'POST',
                     url:"{% url 'bank_transaction' %}",

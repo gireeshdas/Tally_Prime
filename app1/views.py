@@ -44,6 +44,9 @@ from django.conf import settings
 from collections import defaultdict
 from django.utils import timezone
 from calendar import month_name
+
+from django.http import HttpResponse
+import datetime
 # Create your views here.
 
 def login(request):
@@ -13732,7 +13735,7 @@ def create_payment_voucher(request):
             # print(mapped)
             for m in mapped:
 
-                payment_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,amount = m[2], pay_voucher = pay_vouch)
+                payment_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,amount = m[2], pay_voucher = pay_vouch,company = comp)
         
         
         
@@ -13908,7 +13911,7 @@ def cur_balance_change(request):
 
         ledger = tally_ledger.objects.get(id = ac,company = comp)
 
-
+        # print(val)
 
         ledger.current_blnc = val
         ledger.current_blnc_type = cur_type
@@ -13932,7 +13935,7 @@ def pcur_balance_change(request):
         i = request.GET.get('curblnc')
         j = request.GET.get('amount')
         type = request.GET.get('curblnct')
-        #print(type)
+        print(ac)
         
         if type == 'Cr':
             v2 = int(i)- int(j)
@@ -14068,10 +14071,21 @@ def bank_transaction(request):
             return redirect('/')
         
         comp = Companies.objects.get(id = t_id)
+        # print(request.POST.get('id'))
+        # print(request.POST.get('vouch_type').strip())
+        # print(request.POST.get('part'))
+        # print(request.POST.get('bacc'))
+        # print(request.POST.get('t_type'))
+        # print(request.POST.get('instnum'))
+        # print(request.POST.get('instdate'))
+        print(request.POST.get('efaccnum'))
+        print(request.POST.get('efifs'))
+        print(request.POST.get('efbank'))
+        print(request.POST.get('amount'))
 
         if request.method == 'POST':
             id = request.POST.get('id')
-            vouch_name = request.POST.get('vouch_type')
+            vouch_name = request.POST.get('vouch_type').strip()
             partacc = request.POST.get('part')
             bacc = request.POST.get('bacc')
             t_type = request.POST.get('t_type')
@@ -14083,8 +14097,18 @@ def bank_transaction(request):
             amount = request.POST.get('amount')
 
             vouch_type = Voucher.objects.get(voucher_name = vouch_name.strip(),company = comp)
+            # print(id)
+            # print(vouch_name)
+            # print(partacc)
+            # print(bacc)
+            # print(t_type)
+            # print(instno)
+            # print(instdate)
+            # print(acnum)
+            # print(ifsc)
+            # print(bname)
+            # print(amount)
 
-            # print(vouch_type)
 
             if vouch_type.voucher_type == 'Payment':
 
@@ -18502,7 +18526,7 @@ def list_purchase_voucher(request):
         return render(request,'list_payment_type.html',context)
 
 
-def payment_vouchers(request):
+def purchase_vouchers(request):
 
     if 't_id' in request.session:
         if request.session.has_key('t_id'):
@@ -18511,27 +18535,29 @@ def payment_vouchers(request):
             return redirect('/')
 
         comp = Companies.objects.get(id = t_id)
-        
+    
         name = request.POST.get('ptype')
+        print(name)
      
-        # vouch = Voucher.objects.filter(voucher_type = 'Payment',company = comp).get(voucher_name = name)
+        vouch = Voucher.objects.filter(voucher_type = 'Purchase',company = comp).get(voucher_name = name)
 
-        # ledg_grp_all = tally_ledger.objects.filter(company = comp)
+        ledg_grp_all = tally_ledger.objects.filter(company = comp)
         # ledg_grp = tally_ledger.objects.filter(company = comp,under__in = ['Bank_Accounts','Cash_in_Hand'])
+        ledg_grp = tally_ledger.objects.filter(company = comp )
 
      
-        # v  = 1 if payment_voucher.objects.filter(company = comp).values('pid').last() is None else payment_voucher.objects.filter(company = comp).values('pid').last()['pid']+1
+        v  = 1 if purchase_voucher.objects.filter(company = comp).values('pid').last() is None else purchase_voucher.objects.filter(company = comp).values('pid').last()['pid']+1
         
-        # tally = Companies.objects.filter(id=t_id)
+        tally = Companies.objects.filter(id=t_id)
         context = {
                     'company' : comp ,
-                    # 'vouch' : vouch,
-                    # 'date1' : date.today(),
+                    'vouch' : vouch,
+                    'date1' : date.today(),
                     'name':name,
-                    # 'ledg' : ledg_grp,
-                    # 'ledg_all' : ledg_grp_all,
-                    # 'v' : v,
-                    # 'tally':tally
+                    'ledg' : ledg_grp,
+                    'ledg_all' : ledg_grp_all,
+                    'v' : v,
+                    'tally':tally
                 }
         return render(request,'purchase_voucher.html',context)
 
