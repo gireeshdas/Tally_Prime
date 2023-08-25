@@ -824,9 +824,9 @@ function showTransaction(){
                         t_type : $("#t_type").text(),
                         instnum:$("#chnumber").val(),
                         instdate :$("#chdate").val(),
-                        efaccnum :$("#efaccnum").val(),
-                        efifs :$("#efifs").val(),
-                        efbank : $("#efbank").val(),
+                        efaccnum :0,
+                        efifs :0,
+                        efbank :0,
                         amount :$("#chamnt").text(),
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                         
@@ -893,9 +893,9 @@ function showTransaction(){
                         t_type : $("#t_type").text(),
                         instnum:$("#instnum").val(),
                         instdate :$("#instdate").val(),
-                        efaccnum :$("#efaccnum").val(),
-                        efifs :$("#efifs").val(),
-                        efbank : $("#efbank").val(),
+                        efaccnum :0,
+                        efifs :0,
+                        efbank : 0,
                         amount :$("#amount").text(),
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                         

@@ -14010,6 +14010,7 @@ def receipt_pcur_balance_change(request):
         i = request.GET.get('curblnc')
         j = request.GET.get('amount')
         type = request.GET.get('curblnct')
+        print(ac)
         if type == 'Dr':
             v1 = int(i)- int(j)
             if v1 < 0:
@@ -14041,7 +14042,6 @@ def cheque_range(request):
         comp = Companies.objects.get(id = t_id)
     
         acname = request.POST.get('account_name')
-        print(acname)
         data = []
 
         cqrange = ledger_chequebook.objects.filter(ledger_name = acname,company = comp ).values() if ledger_chequebook.objects.filter(ledger_name = acname,company = comp).exists() else None
@@ -14049,7 +14049,6 @@ def cheque_range(request):
         end = 0 if cqrange is None else cqrange[0]['to_number'] 
         q = bank_transactions.objects.filter(bank_account = acname,  transcation_type = 'Cheque',company = comp).values('instno').last()
         chqnum = 0 if q is None else q['instno']
-        print(chqnum)
         if chqnum < end:
             chqnum = start if q is None else (int(q['instno']) + 1)
         else:
@@ -14078,10 +14077,10 @@ def bank_transaction(request):
         # print(request.POST.get('t_type'))
         # print(request.POST.get('instnum'))
         # print(request.POST.get('instdate'))
-        print(request.POST.get('efaccnum'))
-        print(request.POST.get('efifs'))
-        print(request.POST.get('efbank'))
-        print(request.POST.get('amount'))
+        # print(request.POST.get('efaccnum'))
+        # print(request.POST.get('efifs'))
+        # print(request.POST.get('efbank'))
+        # print(request.POST.get('amount'))
 
         if request.method == 'POST':
             id = request.POST.get('id')
@@ -14097,17 +14096,6 @@ def bank_transaction(request):
             amount = request.POST.get('amount')
 
             vouch_type = Voucher.objects.get(voucher_name = vouch_name.strip(),company = comp)
-            # print(id)
-            # print(vouch_name)
-            # print(partacc)
-            # print(bacc)
-            # print(t_type)
-            # print(instno)
-            # print(instdate)
-            # print(acnum)
-            # print(ifsc)
-            # print(bname)
-            # print(amount)
 
 
             if vouch_type.voucher_type == 'Payment':

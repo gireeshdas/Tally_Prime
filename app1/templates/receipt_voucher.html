@@ -681,7 +681,7 @@ function setClosing(){
         url: '{% url "receipt_pcur_balance_change" %}',
         data: {
                 'curblnc': curblnc1,
-                'amount' : amount1,
+                'amount' : amount,
                 'curblnct': curblnct1,
                 'pac' : pac,
         },
@@ -701,66 +701,56 @@ function setClosing(){
 }
 
 /************** close pop up form*****************/
-
-function closeForm() {
-
-document.getElementById("trs_type").style.display = "none";
-
-
-}
-
-/*****************show popup form****************/
 function showTransaction(){   
 
     setClosing();
 
-var id = $('#payacc').val();
-var val_name = id. split(",")[1];
-var val_under = id.split(",")[2];
-var value1,e;
+    var id = $('#payacc').val();
+    var val_name = id. split(",")[1];
+    var val_under = id.split(",")[2];
+    var value1,e;
 
-//console.log(id_under);
-if (val_under === "Bank_Accounts"){
+    if (val_under.trim() === "Bank_Accounts"){
 
-    document.getElementById('trs_type').style.display= "block";
-    
-
-    var count = $('.amnt').length
-
-    for(var i = 1; i <= count; i++) {
-
-        value1 = document.getElementById("amnt" + i).value;
-        document.getElementById('onacc'+i).innerHTML = "On Account";
-        document.getElementById('onacc'+i).style.display = "block";
+        document.getElementById('trs_type').style.display= "block";
         
-        part = document.getElementById("payacc" + i).value;
-        //console.log(part);
-    }
-   
-}
-else{
-    document.getElementById("trs_type").style.display = "hide";
-}
 
-/*-----others----*/
-$("#othacc").html(val_name);
-$("#tramt").html(value1);
-$("#amount").html(value1);
-/*-----cheque----*/
-$("#chacc").html(val_name);
-$("#chamt").html(value1);
-$("#chamnt").html(value1);
-/*-----efund----*/
-$("#efacc").html(val_name);
-$("#efamt").html(value1);
-$("#efamnt").html(value1);
-$('#partid').val(part);
-// console.log($('#partid').val());
-$("#trlist").click(function(e){
-    trvalue= e.target.innerHTML;
-    $("#t_type").html(trvalue);
-    //console.log(trvalue);
+        var count = $('.amnt').length
+
+        for(var i = 1; i <= count; i++) {
+
+            value1 = document.getElementById("amnt" + i).value;
+            // $("#amntchange"+i).val(value1);
+            document.getElementById('onacc'+i).innerHTML = "On Account";
+            document.getElementById('onacc'+i).style.display = "block";
+            part = document.getElementById("payacc" + i).value;
+        
+        }
+    
+    }
+    else{
+        document.getElementById("trs_type").style.display = "hide";
+    }
+    /*-----others----*/
+    $("#othacc").html(val_name);
+    $("#tramt").html(value1);
+    $("#amount").html(value1);
+    /*-----cheque----*/
+    $("#chacc").html(val_name);
+    $("#chamt").html(value1);
+    $("#chamnt").html(value1);
+    /*-----efund----*/
+    $("#efacc").html(val_name);
+    $("#efamt").html(value1);
+    $("#efamnt").html(value1);
+    $('#partid').val(part);
+
+    $("#trlist").click(function(e){
+        trvalue= e.target.innerHTML;
+        $("#t_type").html(trvalue);
+        //console.log(trvalue);
 });
+
 
 /*---------------------cheque range display--&---show cheque number automatically-------------------------*/
 $.ajax({
@@ -824,20 +814,19 @@ $(document).on("click","#modalSave",function(){
 
 document.getElementById("trs_type").style.display = "none";// close pop up form
 
-//console.log($('#t_type').text());
 
 const vouch_id = $('#idlbl').val();
 const vouchtype = $('#vouchtype').text();
-console.log(vouch_id);
-console.log(vouchtype);
-console.log($("#partid").val());
-if ($("#t_type").text() === 'Cheque'){
 
+if ($("#t_type").text() === 'Cheque'){
+    console.log("cheque");
+    console.log($("#chdate").val());
     $.ajax({
                 type : 'POST',
                 url:"{% url 'bank_transaction' %}",
             
                 data:{
+                    
                     id : vouch_id, 
                     vouch_type : vouchtype,
                     part : $("#partid").val(),
@@ -845,16 +834,16 @@ if ($("#t_type").text() === 'Cheque'){
                     t_type : $("#t_type").text(),
                     instnum:$("#chnumber").val(),
                     instdate :$("#chdate").val(),
-                    efaccnum :$("#efaccnum").val(),
-                    efifs :$("#efifs").val(),
-                    efbank : $("#efbank").val(),
+                    efaccnum :0,
+                    efifs :0,
+                    efbank :0,
                     amount :$("#chamnt").text(),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                     
                 },
                 
                 success: function(response) {
-
+                    console.log(response.message)
                     if(response.message === 'success'){
                         $('#modalForm')[0].reset();
                     
@@ -865,13 +854,15 @@ if ($("#t_type").text() === 'Cheque'){
             });
 }
 else if($("#t_type").text() === 'e-Fund Transfer'){
+    console.log("e-f");
+    console.log($("#efdate").val());
 
     $.ajax({
                 type : 'POST',
                 url:"{% url 'bank_transaction' %}",
             
                 data:{
-                    id : vouch_id, 
+                    id : vouch_id,
                     vouch_type : vouchtype,
                     part : $("#partid").val(),
                     bacc : $("#efacc").text(),
@@ -896,22 +887,25 @@ else if($("#t_type").text() === 'e-Fund Transfer'){
             });
 }
 else{   
+    // console.log($("#partid").val());
+    console.log("others");
+    console.log($("#instdate").val());
 
     $.ajax({
                 type : 'POST',
                 url:"{% url 'bank_transaction' %}",
             
                 data:{
-                    id : vouch_id, 
+                    id : vouch_id,
                     vouch_type : vouchtype,
                     part : $("#partid").val(),
                     bacc : $("#othacc").text(),
                     t_type : $("#t_type").text(),
                     instnum:$("#instnum").val(),
                     instdate :$("#instdate").val(),
-                    efaccnum :$("#efaccnum").val(),
-                    efifs :$("#efifs").val(),
-                    efbank : $("#efbank").val(),
+                    efaccnum :0,
+                    efifs :0,
+                    efbank : 0,
                     amount :$("#amount").text(),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                     
@@ -926,8 +920,9 @@ else{
                 
             });
     }
-});
 
+    
+});
 
 </script>
 
