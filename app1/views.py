@@ -47,6 +47,8 @@ from calendar import month_name
 
 from django.http import HttpResponse
 import datetime
+from datetime import datetime
+
 # Create your views here.
 
 def login(request):
@@ -14043,6 +14045,7 @@ def cheque_range(request):
     
         acname = request.POST.get('account_name')
         data = []
+        print(acname)
 
         cqrange = ledger_chequebook.objects.filter(ledger_name = acname,company = comp ).values() if ledger_chequebook.objects.filter(ledger_name = acname,company = comp).exists() else None
         start = 0 if cqrange is None else cqrange[0]['from_number']  
@@ -14058,7 +14061,9 @@ def cheque_range(request):
         data.append(start)
         data.append(end)
         data.append(chqnum)  
-        # print(chqnum)
+        print(chqnum)
+        print(start)
+        print(end)
             
         return JsonResponse(data,safe=False)
         

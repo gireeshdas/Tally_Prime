@@ -762,6 +762,7 @@ function showTransaction(){
    
     
 /*---------------------cheque range display--&---show cheque number automatically-------------------------*/
+    console.log($("#chacc").text())
     $.ajax({
         
         url: '{% url "cheque_range" %}',
@@ -777,6 +778,7 @@ function showTransaction(){
             else{
                 chrange = '&nbsp;&nbsp;&nbsp;&nbsp; Not Applicable'
             }
+            console.log(chrange)
             $('#chrange').html(chrange);
             if(data[0] != 0){
                 if(data[2] != 0){
