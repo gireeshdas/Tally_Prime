@@ -689,7 +689,7 @@ function setClosing() {
         
         success: function (data) {
             
-            $("#blnc"+(id)).html(data);
+            $("#blnc"+id).html(data);
         }
     
     });
@@ -766,6 +766,8 @@ function showTransaction(){
     $.ajax({
         
         url: '{% url "cheque_range" %}',
+        type: 'POST',
+
         data: {
                 'account_name' : $("#chacc").text(),
                  csrfmiddlewaretoken: '{{ csrf_token }}'

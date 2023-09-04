@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'tally.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'infoxtec_tally',
+        'NAME': 'tally1',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

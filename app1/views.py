@@ -83,7 +83,7 @@ def login(request):
             context = { 
                         'company' : comp,
                         'tally' : tally,
-                'latestdate' : max(latestdate),
+                        'latestdate' : max(latestdate),
                 }
 
             return render(request,'base.html',context)
@@ -13705,14 +13705,21 @@ def create_payment_voucher(request):
 
             pid = request.POST.get('idlbl')
             acc = request.POST.get('acc')
-            accnt = acc.split()
+            accnt = acc.split(',')
             date1 = request.POST.get('date1')
             amount=request.POST.get('total')
             nrt = request.POST.get('narrate')
 
             particulars_id = request.POST.getlist("opt[]")
             amounts = request.POST.getlist("amnt[]")
-
+        # print(pid)
+        # print(acc)
+        # print(accnt[1])
+        # print(type(acc))
+        # print(date1)
+        # print(amount)
+        # print(nrt)
+        
             
 
         payment_voucher(company = comp, pid = pid,account = accnt[1],date = date1 , amount = amount , narration = nrt ,voucher = vouch).save()
@@ -13975,6 +13982,7 @@ def receipt_cur_balance_change(request):
         i = request.GET.get('curblnc')
         j = request.GET.get('amount')
         type = request.GET.get('curblnct')
+        # print(type)
 
         if type == 'Cr':
             v2 = int(i)- int(j)
@@ -13990,7 +13998,7 @@ def receipt_cur_balance_change(request):
             
         ledger = tally_ledger.objects.get(id = ac,company = comp)
 
-
+        # print(val)
 
         ledger.current_blnc = val
         ledger.current_blnc_type = cur_type
@@ -14012,7 +14020,7 @@ def receipt_pcur_balance_change(request):
         i = request.GET.get('curblnc')
         j = request.GET.get('amount')
         type = request.GET.get('curblnct')
-        print(ac)
+        # print(ac)
         if type == 'Dr':
             v1 = int(i)- int(j)
             if v1 < 0:
@@ -14025,7 +14033,7 @@ def receipt_pcur_balance_change(request):
             val = int(i) + int(j)
             cur_type = 'Cr'
         
-
+        print(val)
         ledger = tally_ledger.objects.get(id = ac,company= comp)
 
         ledger.current_blnc = val
@@ -14045,7 +14053,7 @@ def cheque_range(request):
     
         acname = request.POST.get('account_name')
         data = []
-        print(acname)
+        print(request.POST.get('account_name'))
 
         cqrange = ledger_chequebook.objects.filter(ledger_name = acname,company = comp ).values() if ledger_chequebook.objects.filter(ledger_name = acname,company = comp).exists() else None
         start = 0 if cqrange is None else cqrange[0]['from_number']  
@@ -14057,7 +14065,7 @@ def cheque_range(request):
         else:
             chqnum = 0
         
-        
+        print(cqrange)
         data.append(start)
         data.append(end)
         data.append(chqnum)  
