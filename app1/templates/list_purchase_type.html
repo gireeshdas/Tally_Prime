@@ -100,7 +100,7 @@
         </div>
       
             
-            <form action="{% url 'purchase_vouchers' %}" id="frmvouch" method="POST"  style="background-color:rgba(0,0,0,.4);">
+            <form action="{% url 'purchase_vouch' %}" id="frmvouch" method="POST"  style="background-color:rgba(0,0,0,.4);">
                 {% csrf_token %}
                 <div class="row container-fluid center  p-2 m-0">
                     <a href="vouchers" style="cursor:pointer" class="btn bt btns_prnt" role="button">Create</a>  
@@ -112,15 +112,12 @@
                         <input type="text" style="height: 20px;background-color: rgb(255, 229, 183)"
                          name="ptype" id="ptype" class="form-control" onclick="showform()" ><br>
                        
-                        <button class="btn btn-small ml-5 w-35 btn btn-info mt-3 text-center" data-dismiss="modal" aria-hidden="true" onclick="setDate()">Submit</button> <br>
-
+                        <!-- <button class="btn btn-small ml-5 w-35 btn btn-info mt-3 text-center" data-dismiss="modal" aria-hidden="true" onclick="setDate()">Submit</button> <br> -->
+                        <input type="submit" class="btn btn-small ml-5 w-35 btn btn-info mt-3 text-center" onclick="setDate()" value="Submit">
 
                     </div>
                     
                 </div>
-
-
-
                 <div class="form-popup ScrollStyle" id="showForm" style="background-color: #213b52" >
                         <h6 style="background-color:rgb(17, 169, 240) ;color:white text">List of Types</h6>
                         <button type="button" class="btn cancel close mt-0 fa fa-times fadeOut" onclick="closeForm()"></button>
@@ -131,6 +128,7 @@
                                 <tr>
                                                                                  
                                     {% for i in voucher %}
+                                    
                                     <option onclick="setvalue('{{i.voucher_name}}')" class="btns_prnt">&nbsp;&nbsp;{{i.voucher_name }}</option>
                                     <input type="hidden" name="underhidden" value="{{i.id}}">
 
@@ -150,25 +148,25 @@
 <script>
 
 
-function setvalue(name){
-    
-            document.getElementById('ptype').value= name;
-            console.log(getElementById('ptype').value);
-        }
-function closeForm() {
-document.getElementById("showForm").style.display = "none";
-}
-function showform(){
-document.getElementById('showForm').style.display= "block";
+    function setvalue(name){
+        
+                document.getElementById('ptype').value= name;
+                console.log(getElementById('ptype').value);
+            }
+    function closeForm() {
+    document.getElementById("showForm").style.display = "none";
+    }
+    function showform(){
+    document.getElementById('showForm').style.display= "block";
 
-function setDate(){
-        console.log("clicked")
-            document.getElementById('hdnDate').value= 1;
-            
-            document.getElementById("currentDate").innerHTML= new Date(document.getElementById('enterDate').value).toDateString();
+    function setDate(){
+            console.log("clicked")
+                document.getElementById('hdnDate').value= 1;
+                
+                document.getElementById("currentDate").innerHTML= new Date(document.getElementById('enterDate').value).toDateString();
 
-        }
+            }
 
-}
+    }
 </script>
 {% endblock %}

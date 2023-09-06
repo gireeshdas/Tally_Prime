@@ -950,9 +950,9 @@ urlpatterns = [
     path('trialbalance_ledger_vouchers/<int:id>/<str:pk>',views.trialbalance_ledger_vouchers,name='trialbalance_ledger_vouchers'),
     path('trialbalance_voucher_alter/<int:pk>',views.trialbalance_voucher_alter,name='trialbalance_voucher_alter'),
 
-
+    #----Nithya--- Purchase Vouchers----
     path('list_purchase_voucher',views.list_purchase_voucher,name='list_purchase_voucher'),
-    path('purchase_vouchers',views.purchase_vouchers,name='purchase_vouchers'),
+    path('purchase_vouch',views.purchase_vouch,name='purchase_vouch'),
     
     path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
               

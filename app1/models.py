@@ -1878,12 +1878,19 @@ class debit_item(models.Model):
 class contra_voucher(models.Model):
 
     voucher = models.ForeignKey(Voucher,on_delete=models.CASCADE,null=True,blank=True)
-
+    company = models.ForeignKey(Companies,on_delete = models.CASCADE,null = True)
     cid = models.IntegerField(null=True)
     account = models.CharField(max_length= 255, null=True)
     date = models.DateField(blank = True,null= True)
     amount = models.IntegerField(null= True)
     narration = models.CharField(max_length=255,null=True)    
+
+class contra_particulars(models.Model):
+    contra_voucher = models.ForeignKey(contra_voucher,on_delete=models.CASCADE,null=True,blank=True)
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
+    particular_id = models.IntegerField(null= True)
+    particular = models.CharField(max_length = 100,null=True,blank=True)
+    amount =  models.IntegerField(null= True)
     
     
 class fmonths(models.Model):

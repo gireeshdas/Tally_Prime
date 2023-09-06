@@ -257,7 +257,6 @@
                     <a href="{% url 'ledgers'%}"><p style="text-align: right;">Create</p></a>
                     <hr>
                     <ul>
-                        {{ldg1}}
                         {% for p in ldg1%}
                         <li id={{forloop.counter}}><a onclick="addsl('{{p.name}}')" data-dismiss="modal" aria-label="Close"><p  class="name" value="{{p.name}}"  id="sl-name{{forloop.counter}}" name="sl-name">
                             {{p.name}}
@@ -300,12 +299,7 @@
                                         <label for="">Bill of Lading/LR-RR No :&nbsp;</label><input type="text" name="bil_lading" id="bil_lading"><br>
                                         <label for="">Motor Vehicle No. &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label><input type="text" name="mvd_no" id="mvd_no"><br>
                                         <label for="">Date&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;:</label> <input type="date" name="date_dis" id="date_dis"><br> 
-                                         
-    
-                                        
                                 </div>
-                                
-                             
                             </div>
                             
                             

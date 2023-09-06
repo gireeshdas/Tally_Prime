@@ -3655,6 +3655,38 @@ def companycreate(request):
         voucher.track_purchase = 'No'
         voucher.prnt_VA_save = 'No'
         voucher.save()
+
+        voucher = Voucher()
+        voucher.company = n
+        voucher.voucher_name = 'Purchase'
+        voucher.voucher_type = 'Purchase'
+        voucher.abbreviation = 'Prchs'
+        voucher.voucherActivate = 'No'
+        voucher.voucherNumber = 'Automatic'
+        voucher.voucherEffective = 'No'
+        voucher.transaction = 'No'
+        voucher.make_optional = 'No'
+        voucher.voucherNarration = 'Yes'
+        voucher.provideNarration = 'No'
+        voucher.track_purchase = 'No'
+        voucher.prnt_VA_save = 'No'
+        voucher.save()
+
+        voucher = Voucher()
+        voucher.company = n
+        voucher.voucher_name = 'Sale'
+        voucher.voucher_type = 'Sale'
+        voucher.abbreviation = 'Sal'
+        voucher.voucherActivate = 'No'
+        voucher.voucherNumber = 'Automatic'
+        voucher.voucherEffective = 'No'
+        voucher.transaction = 'No'
+        voucher.make_optional = 'No'
+        voucher.voucherNarration = 'Yes'
+        voucher.provideNarration = 'No'
+        voucher.track_purchase = 'No'
+        voucher.prnt_VA_save = 'No'
+        voucher.save()
         
         #-- default stock group-Primary
         stockgrp = CreateStockGrp()
@@ -14908,10 +14940,10 @@ def debits_note(request):
     
     ldg=tally_ledger.objects.filter(company=cmp1,under__in=["Bank_Accounts" , "Cash_in_Hand" , "Sundry_Debtors" , "Sundry_Creditors" , "Branch_Divisions"])
     tally = Companies.objects.filter(id=t_id)
-    ldg1=tally_ledger.objects.filter(company=cmp1,under="Purchase_Account")
+    ldg1=tally_ledger.objects.filter(company=cmp1,under="Purchase Accounts")
     item = stock_itemcreation.objects.filter(company = cmp1)
     godown = Godown_Items.objects.filter(comp=cmp1) 
-    print(ldg1)
+    # print(ldg1)
     context = {'tally':tally,'cmp1': cmp1,'item':item,'ldg':ldg,"ldg1":ldg1,"crd_num":crd_num,"financial_year":financial_year,"dt_nm":dt_nm,"godown":godown, "setup_no":setup_no,"setup_nar":setup_nar,'now':now,'name':name} 
     return render(request,'debit_note.html',context)
 
@@ -15907,7 +15939,8 @@ def create_contra_voucher(request):
 
             cid = request.POST['idlbl']
             acc = request.POST['acc']
-            accnt = acc.split()
+            print(acc)
+            # accnt = acc.split(",")
             date1 = request.POST.get('date1')
             amount=request.POST.get('total')
             nrt = request.POST.get('narrate')
@@ -15916,7 +15949,7 @@ def create_contra_voucher(request):
             amounts = request.POST.getlist("amnt[]")
 
             
-        contra_voucher(cid = cid,account = accnt[1],date = date1 , amount = amount , narration = nrt ,voucher = vouch,company = comp).save()
+        contra_voucher(cid = cid,account = acc,date = date1 , amount = amount , narration = nrt ,voucher = vouch,company = comp).save()
         # sumayya----voucher numbering---
         voucher = Voucher.objects.get(company = comp,voucher_type = 'Contra',voucher_name = name)
         voucher.no_of_vouchers += 1
@@ -15934,8 +15967,9 @@ def create_contra_voucher(request):
                
             particular=zip(particulars,particulars_id,amounts)
             mapped=list(particular)
-            # print(mapped)
+            print(mapped)
             for m in mapped:
+                print(m)
 
                 contra_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,amount = m[2], con_voucher = con_vouch)
                 
@@ -15970,7 +16004,7 @@ def contra_cur_balance_change(request):
 
     
     ledger = tally_ledger.objects.get(name = name)
-
+    print(val)
 
 
     ledger.current_blnc = val
@@ -18534,7 +18568,7 @@ def list_purchase_voucher(request):
         return render(request,'list_payment_type.html',context)
 
 
-def purchase_vouchers(request):
+def purchase_vouch(request):
 
     if 't_id' in request.session:
         if request.session.has_key('t_id'):
