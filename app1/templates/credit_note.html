@@ -1,6 +1,4 @@
 {% extends 'base.html' %}
-
-
 {% block body %}
 
 <style>
@@ -101,8 +99,6 @@
                                         <th class="text-center">Quantity</th>
                                         <th class="text-center">Rate per</th>
                                         <th class="text-center">Amount</th>
-                                        
-                                        
                                     </tr>
                                     </thead>
                                     <tbody id="items-table-body">
@@ -112,38 +108,24 @@
                                                 <div class="d-flex">
                                                     <a href="" data-dismiss="modal" data-target="#item_sl" data-toggle="modal" onclick="rowid('product')">
                                                         <input type="text" name='items[]' id="product"  class="form-control" placeholder="Item"></a>
-                                                    
-                                                    
                                                 </div>
                                             </td>
-                                            
                                             <td>
-                                                
                                                 <input type="number" name='quantity[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1" class="form-control qty" step=0 min=0>
-                                                    
-                                                
-
                                             </td>
                                             <td>
                                                 <input type="text" name='price[]' id="unit1" placeholder='Enter Unit Price'
                                                 class="form-control price" step="0.00" min="0"/>
                                             </td>
-                                            
-                                                
-                                            
                                             <td>
                                                 <input type="number" name='total[]' id="total1" placeholder='0.00' class="form-control total"/>
                                             </td>
-
-                                            
                                                 <input type="hidden" name='rowid' id="rowid" placeholder=0 class="form-control rowid" value=0 step="any" >
-                                            
-                                            
                                         </tr>
                                         </tbody>
-                                    <tr>
-                                        <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button" id="addrow" onclick="add_item_row()">+</a></td>
-                                    </tr>
+                                        <tr>
+                                            <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button" id="addrow" onclick="add_item_row()">+</a></td>
+                                        </tr>
                                 </table>
                             </div>
                         </div>
@@ -184,11 +166,10 @@
                         </div>
                         <div class="col-md-6">
                             {% if setup_nar == 'Yes' %}
-
                                 <textarea class="form-control"  id="" name="Note" placeholder="Note" style="height: 190px; margin-top: -39%;"></textarea>
                             {% elif setup_nar == ' ' %}
                                 <textarea class="form-control"  id="" name="Note" placeholder="Note" style="height: 190px; margin-top: -39%;"></textarea>
-                            {%else%}
+                            <!-- {%else%} -->
                             
                             {% endif %}
 
@@ -199,8 +180,7 @@
                     <div class="row mt-4 mb-4">
                         <div class="col-md-9"></div>
                         <div class="col-md-3 mt-3 mb-4">
-                            <button class="btn btn-outline-info w-100 text-light rounded-pill" type="submit">Submit
-                                form
+                            <button class="btn btn-outline-info w-100 text-light rounded-pill" type="submit">Submit Form
                             </button>
                         </div>
                     </div>
@@ -275,7 +255,7 @@
 </div>
 
 <div class="modal fade" id="view">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content" style="background-color: #1c3143; color: white">
             <div class="modal-header">
                 <h5 class="m-3">Receipt Details</h5>
@@ -442,17 +422,18 @@
             <div class="modal-body">
                 <div class="card p-3 m-3">
                     
-                    <a href="{% url 'create_items_crd'%}"><p style="text-align: right;">Create</p></a>
+                    <a href="{% url 'load_stock_item_creation'%}"><p style="text-align: right;">Create</p></a>
                     
                     <hr>
                     <ul>
-                        
-                        
                         {% for p in item%}
-                        
-                        <li id={{forloop.counter}}><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal"><p  class="name" value="{{p.name}}"  onclick="additem('{{p.name}}')"id="item_nm{{forloop.counter}}" name="item_nm">
-                            {{p.name}}
-                        </p></a></li>
+                            <li id={{forloop.counter}}>
+                                <a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">   
+                                    <p  class="name" value="{{p.name}}"  onclick="additem('{{p.name}}')"id="item_nm{{forloop.counter}}" name="item_nm">
+                                        {{p.name}}
+                                    </p>
+                                </a>
+                            </li>
                         {% endfor %}
                     </ul>
                         
@@ -475,17 +456,9 @@
             </div>
             <div class="modal-body">
                 <div class="card p-3 m-3">
-                    
-                    <a href="{% url 'godown_creation_crd'%}"><p style="text-align: right;">Create</p></a>
-                    
+                    <a href="{% url 'godown_creation'%}"><p style="text-align: right;">Create</p></a>
                     <hr>
-                    <div id="li_data_gd">
-
-                    </div>
-                    
-                        
-                    
-
+                    <div id="li_data_gd"></div>
                 </div>
             </div>
         </div>
@@ -497,7 +470,7 @@
                     
 
 <div class="modal fade" id="view_acc">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content" style="background-color: #1c3143; color: white">
             <div class="modal-header">
                 <h5 class="m-3">Party Details</h5>
@@ -806,9 +779,9 @@
     
     
     function rowid(rws_id){
-        let row_ids=rws_id  
-        
-        rowss
+        let row_ids=rws_id  ;
+        rowss;
+
         if (row_ids==="product"){
             document.getElementById("rowid").value="product" 
             document.getElementById("rowss").value="product"
@@ -839,7 +812,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit1').value = amount;
                    
 
             }});
@@ -856,7 +829,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit11').value = amount;
                    
 
             }});
@@ -874,7 +847,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit12').value = amount;
                    
 
             }});  
@@ -892,7 +865,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit13').value = amount;
                    
 
             }});  
@@ -910,7 +883,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit14').value = amount;
                    
 
             }});  
@@ -928,7 +901,7 @@
                     amount = response.amount
                     document.getElementById('rates').value = amount;
                     
-                   
+                    document.getElementById('unit15').value = amount;
 
             }});  
         }
@@ -945,7 +918,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit16').value = amount;
                    
 
             }});  
@@ -963,7 +936,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit17').value = amount;
                    
 
             }});  
@@ -981,7 +954,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit18').value = amount;
                    
 
             }});  
@@ -999,7 +972,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit19').value = amount;
                    
 
             }});  
@@ -1017,7 +990,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit110').value = amount;
                    
 
             }});  
@@ -1035,7 +1008,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit111').value = amount;
                    
 
             }});  
@@ -1053,7 +1026,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit112').value = amount;
                    
 
             }});  
@@ -1071,7 +1044,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit113').value = amount;
                    
 
             }});  
@@ -1089,7 +1062,7 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit114').value = amount;
                    
 
             }});  
@@ -1107,7 +1080,8 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit115').value = amount;
+                   
                    
 
             }});  
@@ -1125,7 +1099,8 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit116').value = amount;
+                   
                    
 
             }});  
@@ -1143,7 +1118,8 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit117').value = amount;
+                   
                    
 
             }});  
@@ -1161,7 +1137,8 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit118').value = amount;
+                   
                    
 
             }});  
@@ -1179,7 +1156,8 @@
                     console.log(response)
                     amount = response.amount
                     document.getElementById('rates').value = amount;
-                    
+                    document.getElementById('unit119').value = amount;
+                   
                    
 
             }});  
@@ -1198,6 +1176,7 @@
                     amount = response.amount
                     document.getElementById('rates').value = amount;
                     
+                    document.getElementById('unit120').value = amount;
                    
 
             }});  
@@ -1218,14 +1197,7 @@
         document.getElementById("gd_name").value=element; 
         document.getElementById("id_gd").value=x;
         
-        
-        
-       
-        
-        
-
-        
-        
+ 
     }
 
     // godown Calculation
@@ -1523,7 +1495,7 @@
                 crd_num:crd_num,
             },
             success:function(response){
-                    console.log(response)
+                    console.log(response.bal_amount)
                     name = response.name
                     mname = response.mname
                     address = response.address

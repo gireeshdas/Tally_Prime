@@ -561,7 +561,13 @@
 /*----------------- create new row----&---change current balance while entering amount------*/
 function createRow(){
     var id = $('.payacc').length;
-    $(".part").append('<tr style="border: none;"><td colspan="18" style="border: none;" class="mt-4"><select id="payacc'+id+'" name="opt[]" class=" rows acc payacc mb-2 p-0" style="width: 150px; border-radius: 5px;" onchange="changeCurbalance(this);" ><option class="opt" id = "opt" >&nbsp;&nbsp;Select Particular </option>{% for i in ledg_all %}<option class="opt" id = "opt" value="{{i.id}}" >&nbsp;&nbsp;{{i.name}}</option> {% endfor %}</select> <br><label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label> <label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label><label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td> <td colspan="2" class="text-right mt-0" style="border: none; "><input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt[]" oninput="calculateTotal();" onchange="showTransaction();"> <button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()"><i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>');
+    $(".part").append(`<tr style="border: none;"><td colspan="18" style="border: none;" 
+        class="mt-4"><select id="payacc'+id+'" name="opt[]" class=" rows acc payacc mb-2 p-0" style="width: 150px; border-radius: 5px;" onchange="changeCurbalance(this);" >
+            <option class="opt" id = "opt" >&nbsp;&nbsp;Select Particular </option>{% for i in ledg_all %}<option class="opt" id = "opt" value="{{i.id}}" >&nbsp;&nbsp;{{i.name}}</option> {% endfor %}</select> <br>
+            <label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label> <label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label>
+            <label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td> <td colspan="2" class="text-right mt-0" style="border: none; ">
+                <input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt[]" oninput="calculateTotal();" onchange="showTransaction();"> <button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()">
+                    <i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>`);
     
 }
 

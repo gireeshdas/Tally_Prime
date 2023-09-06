@@ -254,10 +254,10 @@
             <div class="modal-body">
                 <div class="card p-3 m-3">
                     
-                    <a href="{% url 'crt_dbt_ledg'%}"><p style="text-align: right;">Create</p></a>
+                    <a href="{% url 'ledgers'%}"><p style="text-align: right;">Create</p></a>
                     <hr>
                     <ul>
-                        
+                        {{ldg1}}
                         {% for p in ldg1%}
                         <li id={{forloop.counter}}><a onclick="addsl('{{p.name}}')" data-dismiss="modal" aria-label="Close"><p  class="name" value="{{p.name}}"  id="sl-name{{forloop.counter}}" name="sl-name">
                             {{p.name}}

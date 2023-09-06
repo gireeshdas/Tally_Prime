@@ -79,11 +79,12 @@ def login(request):
             deb = debit_note.objects.filter(comp = comp).last().debitdate if debit_note.objects.filter(comp = comp).exists() else comp.fin_begin
 
             latestdate.extend((pay,rec,cred,deb))
-        
+            filtered_dates = [date for date in latestdate if date is not None]
+
             context = { 
                         'company' : comp,
                         'tally' : tally,
-                        'latestdate' : max(latestdate),
+                        'latestdate' : max(filtered_dates),
                 }
 
             return render(request,'base.html',context)
@@ -124,12 +125,15 @@ def base(request):
         deb = debit_note.objects.filter(comp = comp).last().debitdate if debit_note.objects.filter(comp = comp).exists() else comp.fin_begin
 
         latestdate.extend((pay,rec,cred,deb))
-       
+        filtered_dates = [date for date in latestdate if date is not None]
+            
         context = { 
                     'company' : comp,
                     'tally' : tally,
-                    'latestdate' : max(latestdate),
-                    }
+                    'latestdate' : max(filtered_dates),
+            }
+       
+       
 
         return render(request, 'base.html',context)
     
@@ -7094,6 +7098,7 @@ def data_fetch(request):
         else:
             return redirect('/')
         mname =request.GET.get('mnames')
+        print(mname)
         cmp1 = Companies.objects.get(id=request.session['t_id'])
        
         godowns = stock_itemcreation.objects.get(name=mname)
@@ -14219,8 +14224,9 @@ def savrecdet(request):
             return redirect('/') 
         cmp1 = Companies.objects.get(id=request.session['t_id'])
         idss = credit_note.objects.all().last()
+        # print(idss)
         try:
-            crd_num= int(idss.screditid)+1
+            crd_num= 1 if idss is None else (int(idss.screditid)+1)
         except:
             pass
         try:
@@ -14238,17 +14244,17 @@ def savrecdet(request):
             
 
             pdebit = credit_note(tracking_no=track_no,
-                                        dis_doc_no=dis_doc_no,
-                                        dis_thr=dis_through,
-                                        destination=dis_desti,
-                                        carrie_nmag=car_nm_ag,
-                                        billlr_no=bil_lading,
-                                        mt_vh_no=mvd_no,
-                                        date=date_dis,
-                                        inv_no=inv_no,
-                                        inv_date=inv_date,
-                                        comp=cmp1,
-                                    )
+                                    dis_doc_no=dis_doc_no,
+                                    dis_thr=dis_through,
+                                    destination=dis_desti,
+                                    carrie_nmag=car_nm_ag,
+                                    billlr_no=bil_lading,
+                                    mt_vh_no=mvd_no,
+                                    date=date_dis,
+                                    inv_no=inv_no,
+                                    inv_date=inv_date,
+                                    comp=cmp1,
+                                )
             pdebit.save()
         except:
            
@@ -14279,7 +14285,7 @@ def savrecdet(request):
         opn_bal = items.opening_blnc
         blnc_type = items.opening_blnc_type
         bal_amount=str(format(opn_bal).lstrip("-"))+str(blnc_type)
-        
+        # print(bal_amount)
         
         
 
@@ -14905,6 +14911,7 @@ def debits_note(request):
     ldg1=tally_ledger.objects.filter(company=cmp1,under="Purchase_Account")
     item = stock_itemcreation.objects.filter(company = cmp1)
     godown = Godown_Items.objects.filter(comp=cmp1) 
+    print(ldg1)
     context = {'tally':tally,'cmp1': cmp1,'item':item,'ldg':ldg,"ldg1":ldg1,"crd_num":crd_num,"financial_year":financial_year,"dt_nm":dt_nm,"godown":godown, "setup_no":setup_no,"setup_nar":setup_nar,'now':now,'name':name} 
     return render(request,'debit_note.html',context)
 
