@@ -1201,7 +1201,7 @@
     }
 
     // godown Calculation
-    amount //   tot_amount
+   
     function amount_calcu() {
         $('#tab_godown tbody tr').each(function () {
             elm=document.getElementById("gallary");
@@ -1212,9 +1212,9 @@
                 var price = $(this).find('.rates').val(); 
                 
                 // $(this).find('.qty_tot').val(qty);
-                console.log(typeof qty)
+                // console.log(typeof qty)
                 if (qty!=null, price!=null){
-                    $(this).find('.amount').val(qty * price);
+                    $(this).find('#amount').val(qty * price);
 
                     document.getElementById("tot_amount").value=qty * price
                     document.getElementById("qty_tot").value=qty

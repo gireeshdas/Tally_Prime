@@ -1780,6 +1780,8 @@ class bank_transactions(models.Model):
     rec_voucher = models.IntegerField(null=True,blank=True)
     pay_particular = models.IntegerField(null=True,blank=True)
     rec_particular = models.IntegerField(null=True,blank=True)
+    contra_voucher = models.IntegerField(null=True,blank=True)
+    contra_particular = models.IntegerField(null=True,blank=True)
     bank_account = models.CharField(max_length=255,null=True,blank=True)
     transcation_type = models.CharField(max_length=255,null=True,blank=True)
     instno = models.IntegerField(null=True,blank=True)
@@ -1790,6 +1792,7 @@ class bank_transactions(models.Model):
     bank_name = models.CharField(max_length=255,null=True,blank=True)
     bank_recon_date = models.CharField(max_length=255,null=True,blank=True)
     cheque_printed = models.CharField(max_length=255,null=True,blank=True)
+
     
 
 class credit_note(models.Model):

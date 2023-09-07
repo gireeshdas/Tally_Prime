@@ -165,7 +165,7 @@
                   <tr  class="p-2">
                     <th colspan="18" style="border-bottom: solid 0.5px rgba(205, 196, 196, 0.2) ; border-right:none ;">
                       <div>
-                      <label style="font-weight:600 ;text-transform:capitalize; font-size: 18px;background-color: rgb(17, 54, 86);" 
+                      <label style="font-weight:600 ;text-transform:capitalize; font-size: 18px;background-color: rgb(17, 54, 86);" id = 'vouchtype'
                         name = 'vouchtype' value = '{{name}}'>&nbsp;&nbsp;&nbsp;&nbsp;{{name}}&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <input type="hidden" value="{{name}}" name="type">
@@ -173,14 +173,14 @@
 
                         {% if vouch.voucherNumber == 'Automatic' %}
                         <label style="font-weight: 400; color: #000;" name = 'idlbl'>{{v}}</label>
-                        <input type="hidden" value="{{v}}" name="idlbl">
+                        <input type="hidden" value="{{v}}" name="idlbl" id = 'idlbl'>
                         {% elif vouch.voucherNumber == 'Manual'%}
-                        <input type="number" id = 'vouchNum' style="background-color: rgb(255, 229, 183);height: 20px;" name = 'idlbl'>
+                        <input type="number" id = 'vouchNum' style="background-color: rgb(255, 229, 183);height: 20px;" name = 'idlbl' id = 'idlbl'>
                         {% elif vouch.voucherNumber == 'None' %}
-                        <input type="hidden" value="" name="idlbl">
+                        <input type="hidden" value="" name="idlbl" id = 'idlbl'>
                         <label name = 'idlbl'></label>
                         {% elif vouch.voucherNumber == 'Automatic(Manual Override)' %}
-                        <input type="number" id = 'vouchNum' style="background-color: rgb(255, 229, 183);height: 20px;">
+                        <input type="number" id = 'vouchNum' style="background-color: rgb(255, 229, 183);height: 20px;" id = 'idlbl'>
                         {% endif %}
 
                       </div>
@@ -223,13 +223,14 @@
                                 <td colspan="18" style="border: none;" class="mt-4">
 
                                       
-                                        <a href="" data-dismiss="modal" data-target="#sl_acc1" data-toggle="modal"><input type="text" class="txt" name="acc1"  id="payacc1" ></a><br><br>
+                                        <a href="" data-dismiss="modal" data-target="#sl_acc1" data-toggle="modal"><input type="text" class="txt" name="acc[]"  id="payacc1" ></a><br><br>
                                         <label class = 'blnc1' style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label>
                                         <label class = 'blnc1' id="blnc1" class="p-0 mt-0" style="color: #000;"></label>
                                         <label id ='onacc1' class="onacc" name = 'onacc' style="color: #000; margin-left: 25px;"></label>
+                                        <input type="hidden" id="partacc1" name="accid[]">
                                 </td>
                                 <td colspan="2" class="text-right mt-0" style="border: none; ">
-                                    <input type="number" class = 'txt amnt' id= 'amnt1' name = 'amnt' oninput='calculateTotal();' onchange='showTransaction();'>
+                                    <input type="number" class = 'txt amnt' id= 'amnt1' name = 'amnt[]' oninput='calculateTotal();' onchange='showTransaction();'>
                                     <button type="button" class="butn" id = 'butn1'  onclick="createRow()">
                                         <i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button>
                                 </td>
@@ -409,7 +410,7 @@
                                 </div>
                                 <div class="col-3">
                                     <h4 class="text-align-end font-weight-bold">Amount</h4>
-                                
+                                    <input type="hidden" id="partid">
                                 </div>
                                 
                             </div>
@@ -480,7 +481,7 @@
                                 </div>
                                 <div class="col-3">
                                     <h4 class="text-align-end">Amount</h4>
-                                
+                                    <input type="hidden" id="partid">
                                 </div>
                                 
                             </div>
@@ -562,7 +563,7 @@
                             </div>
                             <div class="col-3">
                                 <h4 class="text-align-end">Amount</h4>
-                            
+                                <input type="hidden" id="partid">
                             </div>
                             
                         </div>
@@ -654,7 +655,7 @@
                             </div>
                             <div class="col-3">
                                 <h4 class="text-align-end">Amount</h4>
-                            
+                                <input type="hidden" id="partid">
                             </div>
                             
                         </div>
@@ -794,8 +795,11 @@ function addsl(name,id){
 }
 function addsm(name,id){
     const id1 = $(this).attr("id")
+    console.log(id1)
     document.getElementById('payacc'+id1).value= name;
+    document.getElementById("partacc"+id1).value = id;
     
+    console.log(document.getElementById("partacc"+id1))
     $.ajax({
         url: '{% url "cur_balance" %}',
         data: {
@@ -803,11 +807,11 @@ function addsm(name,id){
         },
         
         success: function (data) {
-            
+            // console.log(data[0].current_blnc);
             if(data[0].current_blnc_type == 'Dr'){       
-            curData1 = '<input id ="pled" class= "txt" readon value = '+ data[0].current_blnc +'> <input id ="pledt" class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
+            curData1 = '<input id ="pled'+id1+'" class= "txt" readonly value = '+ data[0].current_blnc +'> <input id ="pledt'+id1+'" class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
             else{
-            curData1 = '<input id ="pled" class= "txt" readonly value = '+ data[0].current_blnc +' style="color: red;"> <input id ="pledt" style="color: red;"  class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
+            curData1 = '<input id ="pled'+id1+'" class= "txt" readonly value = '+ data[0].current_blnc +' style="color: red;"> <input id ="pledt'+id1+'" style="color: red;"  class= "txt" readonly value = '+data[0].current_blnc_type+'>';}
            
             $("#blnc"+id1).html(curData1);
         }
@@ -829,55 +833,12 @@ function addsm(name,id){
 var id = 1
 function createRow(){
 
-    const name = ($('#payacc').val());
-    const curblnc = $('#led').val();
-    const curblnct = $('#ledt').val();
-    var amount1= $('#amnt'+id).val();
-    // console.log(ac)
-    $.ajax({
-            url: '{% url "contra_cur_balance_change" %}',
-            data: {
-                    'curblnc': curblnc,
-                    'amount' : amount1,
-                    'curblnct': curblnct,
-                    'name' : name,
-            },
-            
-            success: function (data) {
-                // console.log(data)
-                
-                $("#curbalance").html(data);
-                // console.log(cur_change);
-            }
-            
-        });
-              
-    const pac = $('#payacc'+id).val();
-    const curblnc1 = ($('#pled').val()).split(" ")[0];
-    const curblnct1 = $('#pledt').val();
-  
     
-    
-    
-    $.ajax({
-        url: '{% url "ccur_balance_change" %}',
-        data: {
-                'curblnc': curblnc1,
-                'amount' : amount1,
-                'curblnct': curblnct1,
-                'pac' : pac,
-        },
-        success: function (data) {
-            $("#blnc"+(id-1)).html(data);
-            
-        }
-    
-    });
         
 
    
     id++;
-    $(".part").append('<tr style="border: none;"><td colspan="18" style="border: none;" class="mt-4"><a href="" data-dismiss="modal" data-target="#sl_acc1" data-toggle="modal"><input type="text" class="txt" name="acc1"  id="payacc'+id+'" ></a><br><br><br><label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label><label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label><label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td><td colspan="2" class="text-right mt-0" style="border: none; "><input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt" oninput="calculateTotal();" onchange="showTransaction();"><button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()"><i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>');
+    $(".part").append('<tr style="border: none;"><td colspan="18" style="border: none;" class="mt-4"><a href="" data-dismiss="modal" data-target="#sl_acc1" data-toggle="modal"><input type="text" class="txt" name="acc[]"  id="payacc'+id+'" ></a><input type="hidden" id="partacc'+id+'" name="accid[]"><br><br><br><label class = "blnc1" style="color: #000;" >&nbsp;&nbsp;Cur Bal:&nbsp;&nbsp;</label><label class = "blnc1" id="blnc'+id+'" class="p-0 mt-0" style="color: #000;"></label><label id ="onacc'+id+'" class="onacc" name = "onacc" style="color: #000; margin-left: 25px;"></label></td><td colspan="2" class="text-right mt-0" style="border: none; "><input type="number" class = "txt amnt" id= "amnt'+id+'" name = "amnt[]" oninput="calculateTotal();" onchange="showTransaction();"><button type="button" class="butn" id = "butn'+id+'"  onclick="createRow()"><i class="bi bi-plus-square-fill" style="font-size: 20px;"></i></button></td></tr>');
     
 }
 
@@ -900,6 +861,55 @@ function calculateTotal() {
   
 }
 
+
+function setClosing() {
+    id = $('.amnt').length;
+    console.log(id)
+
+    const name = ($('#payacc').val());
+    const curblnc = $('#led').val();
+    const curblnct = $('#ledt').val();
+    var amount1= $('#amnt'+id).val();
+    // console.log(ac)
+    $.ajax({
+            url: '{% url "contra_cur_balance_change" %}',
+            data: {
+                    'curblnc': curblnc,
+                    'amount' : amount1,
+                    'curblnct': curblnct,
+                    'name' : name,
+            },
+            
+            success: function (data) {
+                $("#curbalance").html(data);
+            }
+            
+        });
+              
+    const pac = $('#payacc'+id).val();
+    console.log($('#pled'+id))
+    const curblnc1 = ($('#pled'+id).val());
+    const curblnct1 = $('#pledt'+id).val();
+  
+    $.ajax({
+        url: '{% url "ccur_balance_change" %}',
+        data: {
+                'curblnc': curblnc1,
+                'amount' : amount1,
+                'curblnct': curblnct1,
+                'pac' : pac,
+        },
+        success: function (data) {
+            // console.log(data);
+            $("#blnc"+(id)).html(data);
+            
+        }
+    
+    });
+
+}
+
+
 /************** close pop up form*****************/
 
 function closeForm() {
@@ -915,6 +925,9 @@ document.getElementById("trs_type1").style.display = "none";
 
 /*****************show popup form****************/
 function showTransaction(){   
+
+    setClosing();
+
     var val_name = $('#payacc').val();
     const id1 = $(this).attr("id")
     const parname =$('#payacc'+id1).val();
@@ -942,7 +955,9 @@ function showTransaction(){
 
                     document.getElementById('onacc'+i).innerHTML = "On Account";
                     document.getElementById('onacc'+i).style.display = "block";
-                    
+                    // console.log(document.getElementById("partacc" + i));
+                    part = document.getElementById("partacc" + i).value;
+                    // console.log(part)`
                 }
                     
             }
@@ -956,47 +971,48 @@ function showTransaction(){
 
                 document.getElementById('onacc'+i).innerHTML = "On Account";
                 document.getElementById('onacc'+i).style.display = "block";
-                
+                part = document.getElementById("partacc" + i).value;
             }
             }
             else{
                 document.getElementById("trs_type").style.display = "hide";
                 
             }
-             /*-----others----*/
-    $("#othacc").html(val_name);
-    $("#tramt").html(value1);
-    $("#amount").html(value1);
-    /*-----cheque----*/
-    $("#chacc").html(val_name);
-    $("#chamt").html(value1);
-    $("#chamnt").html(value1);
-    /*-----efund----*/
-    $("#efacc").html(val_name);
-    $("#efamt").html(value1);
-    $("#efamnt").html(value1);
- /*-----cash----*/
-    $("#csacc").html(val_name);
-    $("#csamt").html(value1);
-    $("#csamnt").html(value1);
-    
-    $("#trlist").click(function(e){
-        trvalue= e.target.innerHTML;
-        $("#t_type").html(trvalue);
-        //console.log(trvalue);
-    });
-    $("#trlist1").click(function(e){
-        trvalue= e.target.innerHTML;
-        $("#t_type").html(trvalue);
-        
-    });
+                        /*-----others----*/
+                $("#othacc").html(val_name);
+                $("#tramt").html(value1);
+                $("#amount").html(value1);
+                /*-----cheque----*/
+                $("#chacc").html(val_name);
+                $("#chamt").html(value1);
+                $("#chamnt").html(value1);
+                /*-----efund----*/
+                $("#efacc").html(val_name);
+                $("#efamt").html(value1);
+                $("#efamnt").html(value1);
+                $('#partid').val(part);
+            /*-----cash----*/
+                $("#csacc").html(val_name);
+                $("#csamt").html(value1);
+                $("#csamnt").html(value1);
+                
+                $("#trlist").click(function(e){
+                    trvalue= e.target.innerHTML;
+                    $("#t_type").html(trvalue);
+                    //console.log(trvalue);
+                });
+                $("#trlist1").click(function(e){
+                    trvalue= e.target.innerHTML;
+                    $("#t_type").html(trvalue);
+                    
+                });
                     
         }
         
     });
     
 
-    
+}
    
    
     
@@ -1034,61 +1050,73 @@ function showTransaction(){
         }
     });
 
-}
+
 
 /*----------------------save modal data to the table--------*/
  /*----others transactions type ----*/
 
 
-  $(document).on("click","#modalSave",function(){
+$(document).on("click","#modalSave",function(){
 
-    document.getElementById("trs_type").style.display = "none";
+    document.getElementById("trs_type").style.display = "none";// close pop up form
+
+
+    const vouch_id = $('#idlbl').val();
+    const vouchtype = $('#vouchtype').text();
+    console.log(vouch_id);
+    console.log(vouchtype);
+
     document.getElementById("trs_type1").style.display = "none";// close pop up form
     
 
 
-    //console.log($('#t_type').text());
-
-    
 
     if ($("#t_type").text() === 'Cheque'){
 
         $.ajax({
-                    type : 'POST',
-                    url:"{% url 'bank_transaction' %}",
-                
-                    data:{
-                        bacc : $("#chacc").text(),
-                        t_type : $("#t_type").text(),
-                        instnum:$("#chnumber").val(),
-                        instdate :$("#chdate").val(),
-                        efaccnum :$("#efaccnum").val(),
-                        efifs :$("#efifs").val(),
-                        efbank : $("#efbank").val(),
-                        amount :$("#chamnt").text(),
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        
-                    },
-                    
-                    success: function(response) {
-
-                        if(response.message === 'success'){
-                            $('#modalForm')[0].reset();
-                        
-                        }
-                        
-                    },
-                    
-                });
-    }
-    else if($("#t_type").text() === 'e-Fund Transfer'){
+            type : 'POST',
+            url:"{% url 'bank_transaction' %}",
         
+            data:{
+                
+                id : vouch_id, 
+                vouch_type : vouchtype,
+                part : $("#partid").val(),
+                bacc : $("#chacc").text(),
+                t_type : $("#t_type").text(),
+                instnum:$("#chnumber").val(),
+                instdate :$("#chdate").val(),
+                efaccnum :0,
+                efifs :0,
+                efbank :0,
+                amount :$("#chamnt").text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+                
+            },
+            
+            success: function(response) {
+                console.log(response.message)
+                if(response.message === 'success'){
+                    $('#modalForm')[0].reset();
+                
+                }
+                
+            },
+                    
+        });
+    }
+
+    else if($("#t_type").text() === 'e-Fund Transfer'){
+      
 
         $.ajax({
                     type : 'POST',
                     url:"{% url 'bank_transaction' %}",
                 
                     data:{
+                        id : vouch_id,
+                        vouch_type : vouchtype,
+                        part : $("#partid").val(),
                         bacc : $("#efacc").text(),
                         t_type : $("#t_type").text(),
                         instnum:$("#efnum").val(),
@@ -1110,6 +1138,7 @@ function showTransaction(){
                     
                 });
     }
+
     else if($("#t_type").text() === 'CASH'){  
         console.log($("#instdate1").val())
         console.log($("#instnum1").val()) 
@@ -1119,14 +1148,17 @@ function showTransaction(){
                     url:"{% url 'bank_transaction' %}",
                 
                     data:{
+                        id : vouch_id,
+                        vouch_type : vouchtype,
+                        part : $("#partid").val(),
                         bacc : $("#csacc").text(),
                         t_type : $("#t_type").text(),
                         instnum:$("#instnum1").val(),
                         instdate :$("#instdate1").val(),
-                        efaccnum :$("#csaccnum").val(),
-                        efifs :$("#csifs").val(),
+                        efaccnum :0,
+                        efifs :0,
                         efbank : $("#csbank").val(),
-                        amount :$("#amount").text(),
+                        amount :0,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                         
                     },
@@ -1140,35 +1172,42 @@ function showTransaction(){
                     
                 });
         }
-    else{   
-        
+        else{   
+    // console.log($("#partid").val());
+    // console.log("others");
+    // console.log($("#instdate").val());
 
-        $.ajax({
-                    type : 'POST',
-                    url:"{% url 'bank_transaction' %}",
+    $.ajax({
+                type : 'POST',
+                url:"{% url 'bank_transaction' %}",
+            
+                data:{
+                    id : vouch_id,
+                    vouch_type : vouchtype,
+                    part : $("#partid").val(),
+                    bacc : $("#othacc").text(),
+                    t_type : $("#t_type").text(),
+                    instnum:$("#instnum").val(),
+                    instdate :$("#instdate").val(),
+                    efaccnum :0,
+                    efifs :0,
+                    efbank : 0,
+                    amount :$("#amount").text(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    
+                },
                 
-                    data:{
-                        bacc : $("#othacc").text(),
-                        t_type : $("#t_type").text(),
-                        instnum:$("#instnum").val(),
-                        instdate :$("#instdate").val(),
-                        efaccnum :$("#efaccnum").val(),
-                        efifs :$("#efifs").val(),
-                        efbank : $("#efbank").val(),
-                        amount :$("#amount").text(),
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        
-                    },
+                success: function(response) {
+                if(response.message === 'success'){
+                    $('#modalForm')[0].reset();
                     
-                    success: function(response) {
-                    if(response.message === 'success'){
-                        $('#modalForm')[0].reset();
-                        
-                    }
-                    },
-                    
-                });
-        }
+                }
+                },
+                
+            });
+    }
+
+    
   });
 
 
