@@ -7130,17 +7130,18 @@ def data_fetch(request):
         else:
             return redirect('/')
         mname =request.GET.get('mnames')
-        print(mname)
+        # print(mname)
         cmp1 = Companies.objects.get(id=request.session['t_id'])
        
-        godowns = stock_itemcreation.objects.get(name=mname)
+        godowns = stock_itemcreation.objects.get(name=mname,company=cmp1)
        
         
-        fetch_data = Godown_Items.objects.filter(comp=cmp1, id=godowns.godown_id).values()
+        fetch_data = Godown_Items.objects.filter(comp=cmp1, item=godowns.name).values()
         lst_data=[]
         for i in fetch_data:
            
             lst_data.append(i)
+        print(lst_data)
       
         return JsonResponse({"status":" not","lst_data":lst_data})
     return redirect('/')
@@ -14114,17 +14115,6 @@ def bank_transaction(request):
             return redirect('/')
         
         comp = Companies.objects.get(id = t_id)
-        # print(request.POST.get('id'))
-        # print(request.POST.get('vouch_type').strip())
-        # print(request.POST.get('part'))
-        # print(request.POST.get('bacc'))
-        # print(request.POST.get('t_type'))
-        # print(request.POST.get('instnum'))
-        # print(request.POST.get('instdate'))
-        # print(request.POST.get('efaccnum'))
-        # print(request.POST.get('efifs'))
-        # print(request.POST.get('efbank'))
-        # print(request.POST.get('amount'))
 
         if request.method == 'POST':
             id = request.POST.get('id')
@@ -14165,9 +14155,6 @@ def bank_transaction(request):
             return HttpResponse({"message": "success"})
 
 # Credit Note
-# def credit_note(request):
-#     return render(request,'credit_note.html')
-
 
 
 def credit_notess(request):
@@ -15626,13 +15613,14 @@ def data_fetch_dbt(request):
             uid = request.session['t_id']
         else:
             return redirect('/')
-        mname =request.GET.get('mnames')
+        mname =request.POST.get('mname')
+        print(mname)
         cmp1 = Companies.objects.get(id=request.session['t_id'])
        
-        godowns = stock_itemcreation.objects.get(name=mname)
+        godowns = stock_itemcreation.objects.get(name=mname,company=cmp1)
        
         
-        fetch_data = Godown_Items.objects.filter(comp=cmp1, id=godowns.godown_id).values()
+        fetch_data = Godown_Items.objects.filter(comp=cmp1, item=godowns.name).values()
         lst_data=[]
         for i in fetch_data:
            

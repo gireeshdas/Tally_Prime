@@ -21,7 +21,7 @@
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="row d-flex " style="background-color: rgb(103, 175, 220);color:rgb(0, 0, 0);width:100%;margin: auto;">
-                <div class="col-sm-4"> Accounting Voucher Creation</div>
+                <div class="col-sm-4 " > Accounting Voucher Creation</div>
                 <div class="col-sm-4" style="text-align: center;">{{cmp1.name}}</div>
             </div>
             <form style="margin-top: 30px;" method="post" action ="{%url 'create_credit'%}">
@@ -369,12 +369,12 @@
                             </table>
                         </div>
                     </div>    
-                        
+<!--                         
                     <div class="row mt-4">
                         <div class="col-sm-12 ">
                             <a href="" data-dismiss="modal"><input type="submit" value="Save" style="margin-left: 45%;"></a>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
@@ -1565,31 +1565,34 @@
     }
 
     function data_fetch(){
-        prd_nm=document.getElementById('rowss').value;
-        itemaaa=document.getElementById(prd_nm).value;
+        prd_nm=document.getElementById('itm_nm').textContent.split(': ')[1];
+        // itemaaa=document.getElementById(prd_nm).value;
+        // console.log(document.getElementById('itm_nm').textContent.split(': '))
+        // console.log(prd_nm)
         $.ajax({
             type: "GET",
             url: "{% url 'data_fetch' %}",
             data: {
-                mnames : itemaaa,
+                mnames : prd_nm,
             
             },
             success:function(response){
-                    console.log(response)
-                    godown = response.lst_data;
-                    // var gal = document.getElementById("gallary")
-                    
-                    for (var {name: n, quantity: qty, id: no} of godown){
-                        
+                console.log(response)
+                godown = response.lst_data;
+                // var gal = document.getElementById("gallary")
+                
+                for (var {name: n, quantity: qty,per : per, id: no} of godown){
+                    if ($('#li_data_gd').children().length === 0) {
+
                         $('#li_data_gd').append(`
                         <ul id="gallary">
                         
                         <li onclick="addgd('Primary')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Primary</a></li>
                         <li onclick="addgd('Main Location')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Main Location</a></li>
-                        <li><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal"><p  class="name"  onclick="addgd('${n}', '${no}')" value="${n}" name="item_nm" id ="item_nm">${n} <span style='margin-left:200px'>${qty}</span> </p></a></li> </ul>`)
+                        <li><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal"><p  class="name"  onclick="addgd('${n}', '${no}')" value="${n}" name="item_nm" id ="item_nm">${n} <span style='margin-left:500px ;text-align:end' >${qty} ${per}</span> </p></a></li> </ul>`)
                         // gal.append(n + qty );
                     }
-                    
+                }
                 
             }
                   

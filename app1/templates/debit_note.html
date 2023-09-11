@@ -1583,13 +1583,19 @@
     }
 
     function data_fetch(){
-        prd_nm=document.getElementById('rowss').value;
-        itemaaa=document.getElementById(prd_nm).value;
+        prd_nm=document.getElementById('itm_nm').textContent.split(': ')[1];
+        console.log(prd_nm)
+        console.log(document.getElementById('itm_nm'))
+        // prd_nm=document.getElementById('rowss').value;
+        // itemaaa=document.getElementById(prd_nm).value;
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "{% url 'data_fetch_dbt' %}",
             data: {
-                mnames : itemaaa,
+                // mnames : itemaaa,
+                mname: prd_nm,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
             
             },
             success:function(response){
@@ -1597,21 +1603,22 @@
                     godown = response.lst_data;
                     // var gal = document.getElementById("gallary")
                     
-                    for (var {name: n, quantity: qty, id: no} of godown){
+                    for (var {name: n, quantity: qty, per : per, id: no} of godown){
 
                         if(qty<0){
                             var qtys=0
                         }else{
                             var qtys=qty
                         }
-                        
-                        $('#li_data_gd').append(`
-                        <ul id="gallary">
-                        
-                        <li onclick="addgd('Primary')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Primary</a></li>
-                        <li onclick="addgd('Main Location')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Main Location</a></li>
-                        <li><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal"><p  class="name"  onclick="addgd('${n}', '${no}')" value="${n}" name="item_nm" id ="item_nm">${n} <span style='margin-left:200px'>${qtys}</span> </p></a></li> </ul>`)
-                        // gal.append(n + qty );
+                        if ($('#li_data_gd').children().length === 0) {
+                            $('#li_data_gd').append(`
+                                <ul id="gallary">
+                                
+                                <li onclick="addgd('Primary')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Primary</a></li>
+                                <li onclick="addgd('Main Location')"><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal">Main Location</a></li>
+                                <li><a href="" data-dismiss="modal" data-target="#item_sltd" data-toggle="modal"><p  class="name"  onclick="addgd('${n}', '${no}')" value="${n}" name="item_nm" id ="item_nm">${n} <span style='margin-left:500px ;text-align:end' >${qty} ${per}</span> </p></a></li> </ul>`)
+                                // gal.append(n + qty );
+                            }
                     }
                     
                 
