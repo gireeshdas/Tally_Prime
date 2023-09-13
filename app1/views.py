@@ -48,6 +48,7 @@ from calendar import month_name
 from django.http import HttpResponse
 import datetime
 from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -16745,7 +16746,10 @@ def journal_pcur_balance_change(request):
     i = request.GET.get('curblnc')
     j = request.GET.get('amount')
     type = request.GET.get('curblnct')
-    #print(type)
+    # print(ac)
+    # print(i)
+    # print(j)
+    # print(type)
 
     val = int(i) + int(j)
 
