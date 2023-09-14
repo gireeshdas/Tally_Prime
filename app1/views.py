@@ -16746,19 +16746,20 @@ def journal_pcur_balance_change(request):
     i = request.GET.get('curblnc')
     j = request.GET.get('amount')
     type = request.GET.get('curblnct')
-    # print(ac)
-    # print(i)
-    # print(j)
-    # print(type)
+    print(ac)
+    print(i)
+    print(j)
+    print(type)
 
     val = int(i) + int(j)
 
     ledger = tally_ledger.objects.get(id = ac)
 
     ledger.current_blnc = val
+    print(ledger.current_blnc)
+
     ledger.current_blnc_type = type
     ledger.save()
-    #print(ledger.current_blnc)
 
     
     return render(request,'journal_pcurbalance_change.html', {'val' : val,'cur_type': type, 'ledger' : ledger })

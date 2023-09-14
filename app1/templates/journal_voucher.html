@@ -342,10 +342,8 @@
 
     function changeCurbalance() {
 
-        const id1 = $(this).attr("id")
-        //console.log(id1);
-        const parid = $('#debit' + id1).val();
-        //console.log(parid);
+        const ids = $(this).attr('id');
+        const parid = $('#debit' + ids).val();
 
         $.ajax({
             url: '{% url "cur_balance" %}',
@@ -356,18 +354,21 @@
             success: function (data) {
 
                 if (data[0].current_blnc_type == 'Dr') {
-                    curData1 = '<input id ="pled"  class= "txt" readonly value = ' + data[0].current_blnc + '> <input id ="pledt" class= "txt" readonly value = ' + data[0].current_blnc_type + '>';
+                    curData1 = '<input id ="pled'+id +'" +  class= "txt" readonly value = ' + data[0].current_blnc + '> <input id ="pledt'+id +'" class= "txt" readonly value = ' + data[0].current_blnc_type + '>';
                 }
                 else {
-                    curData1 = '<input id ="pled" class= "txt" readonly value = ' + data[0].current_blnc + ' style="color: red;"> <input id ="pledt" style="color: red;"  class= "txt" readonly value = ' + data[0].current_blnc_type + '>';
+                    curData1 = '<input id ="pled'+id +'" class= "txt" readonly value = ' + data[0].current_blnc + ' style="color: red;"> <input id ="pledt'+id +'" style="color: red;"  class= "txt" readonly value = ' + data[0].current_blnc_type + '>';
                 }
-                $("#blnc" + id1).html(curData1);
-                // console.log(data[0].current_blnc);
+                $("#blnc" + ids).html(curData1);
 
             }
 
         });
 
+
+    }
+
+    function showTransaction(){
 
     }
     /*----------------------end of set current balance-----------*/
@@ -385,8 +386,8 @@
 
 
         const pac = $('#debit' + id).val();
-        const curblnc1 = $('#pled').val();
-        const curblnct1 = $('#pledt').val();
+        const curblnc1 = $('#pled' +id).val();
+        const curblnct1 = $('#pledt' +id).val();
 
         if (curblnct1 == 'Dr') {
 
