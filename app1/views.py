@@ -16750,8 +16750,18 @@ def journal_pcur_balance_change(request):
     # print(i)
     # print(j)
     # print(type)
-
-    val = int(i) + int(j)
+    if type == 'Cr':
+        v2 = int(i)- int(j)
+        if v2 < 0:
+            val = abs(v2)
+            cur_type = 'Dr'
+        else:
+            val = v2
+            cur_type = 'Cr'
+    else:
+        val = int(i) + int(j)
+        cur_type = 'Dr'
+    # val = int(i) + int(j)
 
     ledger = tally_ledger.objects.get(id = ac)
 
