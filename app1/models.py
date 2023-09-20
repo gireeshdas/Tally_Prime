@@ -1956,6 +1956,7 @@ class receipt_particulars(models.Model):
 
 
 class journal_particulars(models.Model):
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
     j_voucher = models.ForeignKey(journal_voucher,on_delete=models.CASCADE,null=True,blank=True)
 
     particular_id = models.IntegerField(null= True)
