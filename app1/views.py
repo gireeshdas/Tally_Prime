@@ -16797,8 +16797,8 @@ def create_journal_voucher(request):
             name=request.POST['type']
 
             particulars_id = request.POST.getlist("opt[]")
-            debits = 0 if request.POST.getlist("debit_amnt[]") is None else request.POST.getlist("debit_amnt[]")
-            credits = 0 if request.POST.getlist("credit_amnt[]") is None else request.POST.getlist("credit_amnt[]")
+            debits =request.POST.getlist("debit_amnt[]")
+            credits = 0 if request.POST.getlist("credit_amnt[]") is "No" else request.POST.getlist("credit_amnt[]")
             print(particulars_id)
             print(debits)
             print(credits)
@@ -16821,15 +16821,15 @@ def create_journal_voucher(request):
                     id = tally_ledger.objects.get(id = i)
                     particulars.append(id.name)
 
-                # if len(particulars_id)==len(debits) == len(credits) and particulars_id and debits and credits:
+                # if len(particulars_id)==(len(debits)+len(credits) ) and particulars_id and debits and credits:
                 if len(particulars_id)==len(particulars) and particulars_id and particulars:
-                    
+
                     particular=zip(particulars,particulars_id,debits,credits)
                     mapped=list(particular)
                     print(mapped)
                     for m in mapped:
                         print(m)
-                        journal_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,debit = m[2] ,credit = m[3], j_voucher = j_vouch)
+                        journal_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,debit = m[2] ,credit = m[3], j_voucher = j_vouch,company = comp)
         
                 return redirect('/list_journal_voucher')
             else:
