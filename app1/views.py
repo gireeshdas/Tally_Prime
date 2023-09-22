@@ -16746,10 +16746,11 @@ def journal_pcur_balance_change(request):
     i = request.GET.get('curblnc')
     j = request.GET.get('amount')
     type = request.GET.get('curblnct')
-    # print(ac)
-    # print(i)
-    # print(j)
-    # print(type)
+    print(ac)
+    print(i)
+    print(j)
+    print(type)
+    # updated by Nithya
     if type == 'Cr':
         v2 = int(i)- int(j)
         if v2 < 0:
@@ -16764,15 +16765,16 @@ def journal_pcur_balance_change(request):
     # val = int(i) + int(j)
 
     ledger = tally_ledger.objects.get(id = ac)
+    fixed_curbal = ledger.current_blnc
+    fixed_curbal_type = ledger.current_blnc_type
+    # ledger.current_blnc = val
+    # # print(ledger.current_blnc)
 
-    ledger.current_blnc = val
-    print(ledger.current_blnc)
-
-    ledger.current_blnc_type = type
-    ledger.save()
+    # ledger.current_blnc_type = type
+    # ledger.save()
 
     
-    return render(request,'journal_pcurbalance_change.html', {'val' : val,'cur_type': type, 'ledger' : ledger })
+    return render(request,'journal_pcurbalance_change.html', {'val' : val,'cur_type': type, 'fix_cur':fixed_curbal,'fix_curtype' : fixed_curbal_type, 'ledger' : ledger })
     
     
 def create_journal_voucher(request):
@@ -16796,12 +16798,16 @@ def create_journal_voucher(request):
             nrt = request.POST.get('narrate')
             name=request.POST['type']
 
+                # ------------------------updated by Nithya
+
             particulars_id = request.POST.getlist("opt[]")
+            part_ledg = request.POST.getlist("pled[]")
+            part_ledg_type = request.POST.getlist("pledt[]")         
             debits =request.POST.getlist("debit_amnt[]")
             credits = 0 if request.POST.getlist("credit_amnt[]") is "No" else request.POST.getlist("credit_amnt[]")
-            print(particulars_id)
-            print(debits)
-            print(credits)
+            # print(particulars_id)
+            print(part_ledg)
+            print(part_ledg_type)
             vouch = Voucher.objects.get(company = comp,voucher_type = 'Journal',voucher_name = name)
             
             if debit == credit:
@@ -16824,11 +16830,16 @@ def create_journal_voucher(request):
                 # if len(particulars_id)==(len(debits)+len(credits) ) and particulars_id and debits and credits:
                 if len(particulars_id)==len(particulars) and particulars_id and particulars:
 
-                    particular=zip(particulars,particulars_id,debits,credits)
+                    particular=zip(particulars,particulars_id,debits,credits,part_ledg,part_ledg_type)
                     mapped=list(particular)
-                    print(mapped)
+                    # print(mapped)
                     for m in mapped:
-                        print(m)
+                        # print(m)
+                        ta_ledge = tally_ledger.objects.get(id = m[1],company = comp)
+                        ta_ledge.current_blnc = m[4]
+                        ta_ledge.current_blnc_type = m[5]
+                        ta_ledge.save()
+
                         journal_particulars.objects.get_or_create(particular =m[0],particular_id =m[1] ,debit = m[2] ,credit = m[3], j_voucher = j_vouch,company = comp)
         
                 return redirect('/list_journal_voucher')

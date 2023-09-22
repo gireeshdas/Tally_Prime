@@ -1,3 +1,4 @@
+<!-- change by Nithya -->
 <style>
     .balance{
         height: 20px; 
@@ -12,12 +13,16 @@
     
     
     {% if cur_type == 'Cr'%}
-    <input type="text" id = 'pled"+ id +"' value="{{val}}" readonly class="balance" style="color: red;">
-    <input type="text" id = 'pledt"+ id +"' value="{{cur_type}}" readonly class="balance" style="width: 30px; color: red;">
+    <input type="text" id = 'pled"+ id +"' name = pled[] value="{{val}}" readonly class="balance" style="color: red;">
+    <input type="text" id = 'pledt"+ id +"' name = pledt[] value="{{cur_type}}" readonly class="balance" style="width: 30px; color: red;">
+    <input type="text" id = 'fixed_pled"+ id +"' value="{{fix_cur}}" readonly class="balance" style="color: red;"  >
+    <input type="text" id = 'fixed_pledt"+ id +"' value="{{fix_curtype}}" readonly class="balance" style="width: 30px; color: red;"  >
     {% else  %}
-    <input type="text" id = 'pled"+ id +"' value="{{val}}" readonly class="balance">
-    <input type="text" id = 'pledt"+ id +"' value="{{cur_type}}" readonly class="balance" style="width: 30px;">
-    
+    <input type="text" id = 'pled"+ id +"' name = pled[] value="{{val}}" readonly class="balance">
+    <input type="text" id = 'pledt"+ id +"' name = pledt[] value="{{cur_type}}" readonly class="balance" style="width: 30px;">
+    <input type="text" id = 'fixed_pled"+ id +"' value="{{fix_cur}}" readonly class="balance" >
+    <input type="text" id = 'fixed_pledt"+ id +"' value="{{fix_curtype}}" readonly class="balance" style="width: 30px; "  >
+
     {% endif%}
     
     

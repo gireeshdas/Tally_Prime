@@ -1956,7 +1956,7 @@ class receipt_particulars(models.Model):
 
 
 class journal_particulars(models.Model):
-    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True) # added by Nithya
     j_voucher = models.ForeignKey(journal_voucher,on_delete=models.CASCADE,null=True,blank=True)
 
     particular_id = models.IntegerField(null= True)
@@ -2028,7 +2028,7 @@ class sales_voucher_stock_item_allocation(models.Model):
     party_detail_id=models.ForeignKey(party_details,on_delete=models.CASCADE,null=True)
     sales_voucher_stock_item_one_allocation_id=models.ForeignKey(sales_voucher_stock_item_one_allocation,on_delete=models.CASCADE,null=True)
 
-
+#---- Purchase voucher-- Nithya-----
 class purchase_voucher(models.Model):
     company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True,blank=True)
     voucher = models.ForeignKey(Voucher,on_delete=models.CASCADE,null=True,blank=True)
@@ -2048,3 +2048,5 @@ class purchase_particulars(models.Model):
     particular = models.CharField(max_length = 100,null=True,blank=True)
     credit_amount =  models.IntegerField(null= True)
     debit_amount = models.IntegerField(null= True)
+    
+#---- End of Purchase Voucher---------------
