@@ -16746,10 +16746,10 @@ def journal_pcur_balance_change(request):
     i = request.GET.get('curblnc')
     j = request.GET.get('amount')
     type = request.GET.get('curblnct')
-    print(ac)
-    print(i)
-    print(j)
-    print(type)
+    # print(ac)
+    # print(i)
+    # print(j)
+    # print(type)
     # updated by Nithya
     if type == 'Cr':
         v2 = int(i)- int(j)
@@ -18583,16 +18583,16 @@ def purchase_vouchers(request):
         comp = Companies.objects.get(id = t_id)
     
         name = request.POST.get('ptype')
-        print(name)
+        # print(name)
      
         vouch = Voucher.objects.filter(voucher_type = 'Purchase',company = comp).get(voucher_name = name)
-
+        st_item = stock_itemcreation.objects.filter(company = comp)
         ledg_grp_all = tally_ledger.objects.filter(company = comp)
-        # ledg_grp = tally_ledger.objects.filter(company = comp,under__in = ['Bank_Accounts','Cash_in_Hand'])
-        ledg_grp = tally_ledger.objects.filter(company = comp )
+        ledg_grp = tally_ledger.objects.filter(company = comp,under__in = ['Purchase Accounts'])
+        # ledg_grp = tally_ledger.objects.filter(company = comp )
 
      
-        v  = 1 if purchase_voucher.objects.filter(company = comp).values('pid').last() is None else purchase_voucher.objects.filter(company = comp).values('pid').last()['pid']+1
+        v  = 1 if purchase_voucher.objects.filter(company = comp).values('pur_id').last() is None else purchase_voucher.objects.filter(company = comp).values('pid').last()['pid']+1
         
         tally = Companies.objects.filter(id=t_id)
         context = {
@@ -18603,8 +18603,21 @@ def purchase_vouchers(request):
                     'ledg' : ledg_grp,
                     'ledg_all' : ledg_grp_all,
                     'v' : v,
-                    'tally':tally
+                    'tally':tally,
+                    'item': st_item,
                 }
         return render(request,'purchase_voucher.html',context)
 
+def create_purchase_voucher(request):
+    
+    if 't_id' in request.session:
+        if request.session.has_key('t_id'):
+            t_id = request.session['t_id']
+        else:
+            return redirect('/')
 
+        comp = Companies.objects.get(id = t_id)
+
+    return redirect('/list_purchase_voucher')
+
+#------- End of Purchase Vouchers----
