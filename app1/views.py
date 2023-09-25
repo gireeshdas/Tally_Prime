@@ -18621,3 +18621,9 @@ def create_purchase_voucher(request):
     return redirect('/list_purchase_voucher')
 
 #------- End of Purchase Vouchers----
+
+# -Daybook---(Gireesh Das)
+
+def Daybook_page(request):
+    return render(request,"daybook_page.html")
+

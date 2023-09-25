@@ -956,6 +956,9 @@ urlpatterns = [
     path('create_purchase_voucher' , views.create_purchase_voucher,name='create_purchase_voucher'),                   
 
     #------- End of Purchase Vouchers----
+
+    # ---Gireesh Das-- Daybook ----
+    path("Daybook_page",views.Daybook_page,name="Daybook_page"),
     
     path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
               

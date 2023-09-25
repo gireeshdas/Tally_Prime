@@ -2048,5 +2048,10 @@ class purchase_particulars(models.Model):
     particular = models.CharField(max_length = 100,null=True,blank=True)
     credit_amount =  models.IntegerField(null= True)
     debit_amount = models.IntegerField(null= True)
+
+class receipt_note_no(models.Model):
+    purchase = models.ForeignKey(purchase_voucher,on_delete=models.CASCADE,null=True,blank=True)
+    note_no = models.IntegerField(null=True,blank=True)
+    date = models.DateField(blank = True, null= True)
     
 #---- End of Purchase Voucher---------------
