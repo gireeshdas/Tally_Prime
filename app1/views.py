@@ -18625,5 +18625,7 @@ def create_purchase_voucher(request):
 # -Daybook---(Gireesh Das)
 
 def Daybook_page(request):
-    return render(request,"daybook_page.html")
+    date=Companies.objects.all()
+    context={"date":date}
+    return render(request,"daybook_page.html",context)
 
