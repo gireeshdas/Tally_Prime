@@ -18625,7 +18625,17 @@ def create_purchase_voucher(request):
 # -Daybook---(Gireesh Das)
 
 def Daybook_page(request):
-    date=Companies.objects.all()
-    context={"date":date}
-    return render(request,"daybook_page.html",context)
+    company=Companies.objects.all() 
+    vch= payment_voucher.objects.all()
+    particulars = payment_particulars.objects.all()
+
+    # receipt_voucher
+    receipts = receipt_voucher.objects.all()
+    receipts_particular=receipt_particulars.objects.all()
+
+    return render(request,"daybook_page.html",{"company":company,
+                                               "vch":vch,
+                                               "particulars":particulars,
+                                               "receipts":receipts,
+                                               "receipts_particular":receipts_particular})
 
