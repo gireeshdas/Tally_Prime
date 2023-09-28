@@ -761,6 +761,7 @@
                         </a>
                         <ul>
                             <li><a href="{% url 'Daybook_page' %}"><i class="bx bx-right-arrow-alt"></i>Daybook</a></li>
+
                             <li>
                                 <a href="javascript:;" class="has-arrow"><i class='bx bx-right-arrow-alt'></i>Vouchers</a>
                                 <ul>
@@ -1119,24 +1120,34 @@
                 }
             </script>
             
+            
             <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
                 <thead>
+                    <tr style="font-size: large; background-color: bisque; color: #000; border: 1px solid #000; line-height: 3;">
+                        <th colspan="5">Daybook</th>
+                        <th style="text-align: right;font-size: small;">For {% for c in company %}{{ c.books_begin }}{% endfor %}</th>
+                    </tr>
+                       
+                        
+                    </tr>
                     <tr style="font-size: larger; background-color: bisque; color: #000;">
-                        <th>Particular</th>
+                       
                         <th>Date</th>
+                        <th>Particular</th>
                         <th>Vch Type</th>
                         <th>Vch No</th>
-                        <th>Debit Amount <br><span style="font-weight: normal;">(Inwards qty)</span></th>
-                        <th>Credit Amount <br><span style="font-weight: normal;">(Outward qty)</span></th>
+                        <th>Debit Amount <br><span style="font-weight: normal; font-size: 15px;">(Inwards qty)</span></th>
+                        <th>Credit Amount <br><span style="font-weight: normal; font-size: 15px;">(Outward qty)</span></th>
                     </tr>
                 </thead>
                 <tbody style="background-color: bisque; color: #000; border-collapse: collapse; border: 1px solid #000;">
                     {% for v in vch %}
-                    <tr class="table-row" onclick="toggleRowSelection(this); window.location.href=''" style="cursor: pointer;">
+                    <tr class="table-row" onclick="toggleRowSelection(this); window.location.href='{% url 'payment_daybook_edit' v.id  %}'" style="cursor: pointer;border: 1px solid #00000022;">
+                        <td>{{ v.date }}</td>
                         {% for particular in v.payment_particulars_set.all %}
                             <td>{{ particular.particular }}</td>
                         {% endfor %}
-                        <td>{{ v.date }}</td>
+                        
                         <td>{{ v.voucher.voucher_name }}</td>
                         <td>{{ v.pid }}</td>
                         {% if v.is_debit %}
@@ -1149,11 +1160,12 @@
                     </tr>
                     {% endfor %}
                     {% for receipt in receipts %}
-                    <tr class="table-row" onclick="toggleRowSelection(this); window.location.href=''" style="cursor: pointer;">
+                    <tr class="table-row" onclick="toggleRowSelection(this); window.location.href='{% url 'receipt_daybook_edit' receipt.id  %}'" style="cursor: pointer;border-collapse: collapse; border: 1px solid #00000022;">
+                        <td>{{ receipt.date }}</td>
                         {% for receipt_particular in receipt.receipt_particulars_set.all %}
                         <td>{{ receipt_particular.particular }}</td>
                         {% endfor %}
-                        <td>{{ receipt.date }}</td>
+                     
                         <td>{{ receipt.voucher.voucher_name }}</td>
                         <td>{{ receipt.rid }}</td>
                         {% if receipt.is_debit %} {# Assuming you have an 'is_debit' attribute in your receipt model #}
@@ -1162,6 +1174,24 @@
                         {% else %}
                             <td></td> {# Leave this cell empty for debit entry #}
                             <td>{{ receipt.amount }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    {% for c in contra %}
+                    <tr class="table-row" onclick="toggleRowSelection(this); window.location.href='{% url 'contra_daybook_edit' c.id  %}'" style="cursor: pointer;border: 1px solid #00000022;">
+                        <td>{{ c.date }}</td>
+                        {% for contra_particular in c.contra_particulars_set.all %}
+                        <td>{{ contra_particular.particular }}</td>
+                        {% endfor %}
+                       
+                        <td>{{ c.voucher.voucher_name }}</td>
+                        <td>{{ c.cid }}</td>
+                        {% if c.is_debit %} {# Assuming you have an 'is_debit' attribute in your receipt model #}
+                            <td>{{ c.amount }}</td>
+                            <td></td> {# Leave this cell empty for credit entry #}
+                        {% else %}
+                            <td></td> {# Leave this cell empty for debit entry #}                       
+                            <td>{{ c.amount }}</td>
                         {% endif %}
                     </tr>
                     {% endfor %}
